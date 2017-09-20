@@ -11,7 +11,11 @@ var passport = require('passport');
 
 app.use(flash());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' }));
+app.use(session({
+    secret: 'ilovescotchscotchyscotchscotch',
+    // store: sessionStore, // connect-mongo session store
+    proxy: true
+}));
 app.use(passport.initialize());
 app.use(passport.session()); 
 app.use(express.static(__dirname + '/images'));
