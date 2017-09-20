@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <title>login</title>
+                <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+<script type="javascript">
+    $('#form').submit(function(event){
+	    return false;
+    });
+</script>
+        </head>
+        <body>
+	<h1><%= mesage %></h1>
+        <form id="form" action="/user" method="POST">
+                <p>username :</p><input type="text" name="username" id="user"/><br>
+                <p>password :</p><input type="password" name="password" id="password"/><br>
+                <input type="submit">
+        </form>
+        </body>
+</html>
+

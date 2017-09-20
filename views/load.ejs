@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <title>login</title>
+                <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+				<!-- <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script> -->
+        </head>
+        <body>
+		<h1>Hello : <%= name %></h1>
+		<table>
+		<tr>
+			<th>Name</th>
+			<th>Url</th>
+			<th>Status</th>
+		</tr>
+		<% content.forEach(function(data){ %>
+		<tr>
+			<th><a href="/project/<%- JSON.stringify(data.name).replace(/"/g, '') %>"><%- JSON.stringify(data.name).replace(/"/g, '') %></a></th>
+			<th><%- JSON.stringify(data.url).replace(/"/g, '') %></th>
+			<th><%- JSON.stringify(data.color).replace(/"/g, '') %></th>
+		</tr>
+		<% }) %>
+		</table>
+	</body>
+</html>
+

@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<style type="text/css">
+  img {
+    width: 20px;
+    vertical-align: middle;
+    display: none;
+  }
+</style>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+
+<script type="text/javascript">
+  $(function () {
+    var socket = io();
+    $('#send').click(function(){
+      $('#results').empty();
+      $("#img").css('display', 'inline-block');
+      var command = $('#command').val();
+      socket.emit('send command', { 'command':command, 'domain': $('span').text() });
+      $('#command').val('');
+      return false;
+    });
+
+    socket.on('false', function(err){
+          $('#results').append($('<pre>').text(err));
+          $("#img").css('display', 'none');
+    });
+
+    socket.on('resutls', function(resutls){
+      // resutls.split("\n").forEach(function(data){
+        if(resutls == ''){
+          $('#results').append($('<pre>').text('suscess'));
+          $("#img").css('display', 'none');
+        }else{
+          $('#results').append($('<pre>').text(resutls));
+          $("#img").css('display', 'none'); 
+        // });
+        }
+    });
+});
+</script>
+  <head>
+    <title>project</title>
+  </head>
+  <body>
+      <h1>Project :<span><%= domain %></span></h1>
+      <p>Command: <input type="text" id="command"></input></p>
+      <input type="button" value="send" id="send"></input><img id="img" src="/l.gif">
+      <ul id='results'>Results...</ul>
+  </body>
+</html>
