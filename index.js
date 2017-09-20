@@ -14,7 +14,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session({
     secret: 'ilovescotchscotchyscotchscotch',
     // store: sessionStore, // connect-mongo session store
-    proxy: true
+    proxy: true,
+    resave: true,
+    saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session()); 
