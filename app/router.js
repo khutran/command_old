@@ -6,12 +6,18 @@ module.exports = function(app , passport){
 
 
 	app.get('/', function(req, res){
-		res.render('index', {'mesage': 'login'});
+		if (req.isAuthenticated()){
+			res.render('load', {'name': req.flash('usernames')[0], 'content': req.user});
+			// console.log(req.flash('usernames')[0]);
+		}else{
+			res.render('index', {'mesage': 'login'});
+		}
 	});
 
 	app.post('/user', passport.authenticate('login', {failureRedirect: '/'}), 
 		function(req, res){
-			res.render('load', {'name': req.body.username, 'content': req.user});
+			req.flash('usernames', req.body.username);
+			res.render('load', {'name': req.flash('usernames')[0], 'content': req.user});
 		}
 	);
 
