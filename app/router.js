@@ -7,8 +7,9 @@ module.exports = function(app , passport){
 
 	app.get('/', function(req, res){
 		if (req.isAuthenticated()){
-			res.render('load', {'name': req.flash('usernames')[0], 'content': req.user});
-			// console.log(req.flash('usernames')[0]);
+			res.render('load', {'name': req.session.userlogin, 'content': req.user});
+				// console.log(req);
+			res.end();
 		}else{
 			res.render('index', {'mesage': 'login'});
 		}
@@ -16,8 +17,9 @@ module.exports = function(app , passport){
 
 	app.post('/user', passport.authenticate('login', {failureRedirect: '/'}), 
 		function(req, res){
-			req.flash('usernames', req.body.username);
-			res.render('load', {'name': req.flash('usernames')[0], 'content': req.user});
+			req.session.userlogin = req.body.username;
+			// req.flash('usernames', req.body.username);
+			res.render('load', {'name': req.session.userlogin, 'content': req.user});
 		}
 	);
 
