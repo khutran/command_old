@@ -18,7 +18,6 @@ module.exports = function(app , passport){
 	app.post('/user', passport.authenticate('login', {failureRedirect: '/'}), 
 		function(req, res){
 			req.session.userlogin = req.body.username;
-			// req.flash('usernames', req.body.username);
 			res.render('load', {'name': req.session.userlogin, 'content': req.user});
 		}
 	);

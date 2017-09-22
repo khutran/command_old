@@ -5,7 +5,7 @@ module.exports = function(io){
 
 	io.on('connection', function(socket){
 		socket.on('send command', function(command){
-			process.chdir(`/var/www/web/${command.domain}`);
+			process.chdir(`/var/www/web/${command.domain}/workspace`);
 			var promise = function(){
 				return Q.promise((res) => {
 					var cmd = command.command.split(" ");
