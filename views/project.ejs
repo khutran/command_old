@@ -28,14 +28,14 @@
     });
 
     socket.on('resutls', function(resutls){
-      // resutls.split("\n").forEach(function(data){
+      // console.log(resutls);
+      // $("#img").css('display', 'none'); 
         if(resutls == ''){
           $('#results').append($('<pre>').text('suscess'));
           $("#img").css('display', 'none');
         }else{
           $('#results').append($('<pre>').text(resutls));
           $("#img").css('display', 'none'); 
-        // });
         }
     });
 });

@@ -11,14 +11,17 @@ module.exports = function(io){
 					return Q.promise((res) => {
 						var cmd = command.command.split(" ");
 						switch (cmd[0]){
+							case 'ls':
 							case 'pwd':
 							case 'php':
 							case 'composer':
-								exec(command.command, function(error, resutls){
+								exec(command.command, function(error, stdout, stderr){
 									if (error) {
 										return res({'status': 'error', 'error': error.stack});
-									}else {
-										return res({'status': 'suscess', 'data':resutls});
+									}else if (stdout == ''){
+										return res({'status': 'suscess', 'data':stderr});
+									}else{
+										return res({'status': 'suscess', 'data':stdout});
 									}
 								});	
 								break;
