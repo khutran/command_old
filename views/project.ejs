@@ -6,6 +6,9 @@
     vertical-align: middle;
     display: none;
   }
+  #wordpress {
+   display: none;
+  }
 </style>
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
@@ -13,13 +16,42 @@
 <script type="text/javascript">
   $(function () {
     var socket = io();
+    var domain = $('span').text();
+
     $('#send').click(function(){
       $('#results').empty();
       $("#img").css('display', 'inline-block');
       var command = $('#command').val();
-      socket.emit('send command', { 'command':command, 'domain': $('span').text() });
+      socket.emit('send command', { 'command':command, 'domain': domain });
       $('#command').val('');
       return false;
+    });
+    
+    $('#logs').click(function() {
+      $('#results').empty();
+      socket.emit('logs', {'domain': domain});
+    });
+
+    $('#wordpress').click(function(event) {
+      var display = event.target.style.display;
+      if(display == 'node'){
+        return;
+      }else{
+        $('#loads').empty();
+        socket.emit('cd', {'domain': domain});
+        $(this).css('display', 'none');
+      }
+    });
+
+    socket.emit('loads', {'domain': domain});
+    socket.on('loads', function(loads){
+      $('#loads').empty();
+      if(loads.framework == 'wordpress'){
+        $("#wordpress").css('display', 'inline-block');
+        $('#loads').append($('<pre>').text(loads.resutls));
+      }else{
+        $('#loads').append($('<pre>').text(loads.resutls));
+      }
     });
 
     socket.on('false', function(err){
@@ -28,14 +60,12 @@
     });
 
     socket.on('resutls', function(resutls){
-      // console.log(resutls);
-      // $("#img").css('display', 'none'); 
         if(resutls == ''){
           $('#results').append($('<pre>').text('suscess'));
           $("#img").css('display', 'none');
         }else{
           $('#results').append($('<pre>').text(resutls));
-          $("#img").css('display', 'none'); 
+          $("#img").css('display', 'none');
         }
     });
 });
@@ -45,8 +75,10 @@
   </head>
   <body>
       <h1>Project :<span><%= domain %></span></h1>
-      <p>Command: <input type="text" id="command"></input></p>
-      <input type="button" value="send" id="send"></input><img id="img" src="/l.gif">
+      <ul id="loads"></ul>
+      <input type="button" id="wordpress" value="cd themes"></input>
+      <p>Command: <input type="text" id="command"></input><input type="button" id="logs" value="show log"></input></p>
+      <input type="button" value="run command" id="send"></input><img id="img" src="/l.gif">
       <ul id='results'>Results...</ul>
   </body>
 </html>
