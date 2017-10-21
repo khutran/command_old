@@ -22,7 +22,7 @@ app.use(session({
 
 app.use(passport.initialize());
 app.use(passport.session()); 
-app.use(express.static(__dirname + '/images'));
+app.use(express.static(__dirname + '/'));
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');

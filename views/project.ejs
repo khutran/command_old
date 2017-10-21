@@ -1,84 +1,47 @@
 <!doctype html>
 <html>
-<style type="text/css">
-  img {
-    width: 20px;
-    vertical-align: middle;
-    display: none;
-  }
-  #wordpress {
-   display: none;
-  }
-</style>
+<link rel="stylesheet" type="text/css" href="http://nodetest.dev/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="http://nodetest.dev/assets/css/app.css">
 <script src="/socket.io/socket.io.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="http://nodetest.dev/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="http://nodetest.dev/assets/js/app.js"></script>
 
-<script type="text/javascript">
-  $(function () {
-    var socket = io();
-    var domain = $('span').text();
-
-    $('#send').click(function(){
-      $('#results').empty();
-      $("#img").css('display', 'inline-block');
-      var command = $('#command').val();
-      socket.emit('send command', { 'command':command, 'domain': domain });
-      $('#command').val('');
-      return false;
-    });
-    
-    $('#logs').click(function() {
-      $('#results').empty();
-      socket.emit('logs', {'domain': domain});
-    });
-
-    $('#wordpress').click(function(event) {
-      var display = event.target.style.display;
-      if(display == 'node'){
-        return;
-      }else{
-        $('#loads').empty();
-        socket.emit('cd', {'domain': domain});
-        $(this).css('display', 'none');
-      }
-    });
-
-    socket.emit('loads', {'domain': domain});
-    socket.on('loads', function(loads){
-      $('#loads').empty();
-      if(loads.framework == 'wordpress'){
-        $("#wordpress").css('display', 'inline-block');
-        $('#loads').append($('<pre>').text(loads.resutls));
-      }else{
-        $('#loads').append($('<pre>').text(loads.resutls));
-      }
-    });
-
-    socket.on('false', function(err){
-          $('#results').append($('<pre>').text(err));
-          $("#img").css('display', 'none');
-    });
-
-    socket.on('resutls', function(resutls){
-        if(resutls == ''){
-          $('#results').append($('<pre>').text('suscess'));
-          $("#img").css('display', 'none');
-        }else{
-          $('#results').append($('<pre>').text(resutls));
-          $("#img").css('display', 'none');
-        }
-    });
-});
-</script>
-  <head>
+<head>
     <title>project</title>
-  </head>
-  <body>
-      <h1>Project :<span><%= domain %></span></h1>
-      <ul id="loads"></ul>
-      <input type="button" id="wordpress" value="cd themes"></input>
-      <p>Command: <input type="text" id="command"></input><input type="button" id="logs" value="show log"></input></p>
-      <input type="button" value="run command" id="send"></input><img id="img" src="/l.gif">
-      <ul id='results'>Results...</ul>
-  </body>
+</head>
+
+<body>
+    <h1>Project :<span id="domain"><%= domain %></span><p id="user">user :<span><%= user %></span></p></h1> 
+    <ul id="loads"></ul>
+    <input type="button" id="wordpress" value="cd themes"></input>
+    <p id="nut">Command:
+        <input type="text" id="command"></input>
+        <input type="button" id="logs" value="show log"></input>
+        <input type="button" id="atactbuild" value="build project" data-toggle="modal" data-target="#myModal"></input>
+    </p>
+    <input type="button" value="run command" id="send"></input><img id="img" src="/assets/images/l.gif">
+    <ul id='results'>Results...</ul>
+    <!-- Button trigger modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Build Project</h4>
+                </div>
+                <div class="modal-body">
+                    <img id="img1" src="/assets/images/l.gif">
+                    <span class="status"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary build">Build</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>

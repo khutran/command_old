@@ -1,14 +1,15 @@
 var LocalStrategy   = require('passport-local').Strategy;
+const objectAssign = require('object-assign');
 var jenkinsapi = require('jenkins');
 var x = require('./module');
+var connection = require('./config');
 var url = require('./config').url;
-module.exports = function(app , passport){
 
+module.exports = function(app , passport){
 
 	app.get('/', function(req, res){
 		if (req.isAuthenticated()){
 			res.render('load', {'name': req.session.userlogin, 'content': req.user});
-				// console.log(req);
 			res.end();
 		}else{
 			res.render('index', {'mesage': 'login'});
@@ -23,10 +24,8 @@ module.exports = function(app , passport){
 	);
 
 	app.get('/project/:id', x.loginM ,function(req, res){
-		res.render('project', {'domain': req.params.id});
-
+		res.render('project', {'domain': req.params.id, 'user': req.session.userlogin});
 	});
-
 	passport.serializeUser(function(user, done) {
 	  done(null, user);
 	});
@@ -39,13 +38,17 @@ module.exports = function(app , passport){
 		function(user, pass, done) {
 			var urllogin = `http://${user}:${pass}@${url}`;
 			var connect = jenkinsapi({baseUrl: urllogin, crumbIssuer: true});
+			var userconnects = user+'connect'
+			var userconnect = [];
+			userconnect[userconnects] = connect;
+			objectAssign(connection, userconnect);
 			connect.view.get(user,function(err, data){
 				if (err){
 					return done(null, false, err);
 				}else{
 					return done(null, data.jobs);
 				}
-			});
+			});				
 		}
 	));
 }

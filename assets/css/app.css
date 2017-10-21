@@ -1,0 +1,18 @@
+img {
+    width: 20px;
+    vertical-align: middle;
+    display: none;
+}
+
+#wordpress {
+    display: none;
+}
+/*.status{
+	display: none;
+}*/
+#nut{
+	margin-top: 10px;
+}
+#user{
+	float: right;
+}

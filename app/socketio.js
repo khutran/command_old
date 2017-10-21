@@ -1,6 +1,7 @@
 var Q = require('q');
 var exec = require('child_process').exec;
 var path = require('./config').path;
+var connection = require('./config');
 var fs = require('fs');
 module.exports = function(io){
 	io.on('connection', function(socket){
@@ -20,10 +21,8 @@ module.exports = function(io){
 				exec('ls', function(error, data){
 					if(error){
 						socket.emit('loads',{'resutls':error.message, 'framework': framework});
-						// console.log(error);
 					}else{
 						socket.emit('loads',{'resutls': data, 'framework': framework});
-						// console.log(data);
 					}
 				});				
 			}else{
@@ -128,6 +127,42 @@ module.exports = function(io){
 				}
 			});
 
+		});
+
+		socket.on('build', function(build){
+			let connectuser = `${build.user}connect`;
+			let connect = connection[connectuser];
+			try{
+				// var log = connect.build.logStream(build.domain, 4);
+
+				// log.on('data', function(text) {
+				//   process.stdout.write(text);
+				// });
+
+				// log.on('error', function(err) {
+				//   console.log('error', err);
+				// });
+
+				// log.on('end', function() {
+				//   console.log('end');
+				// });
+				connect.job.build(build.domain ,function(err, data){
+					if(err){
+					  	socket.emit('build', {'status': 'error', 'resutls': err});
+					}else{
+						connect.job.get(build.domain,function(error, data2){
+							if(error){
+								socket.emit('build', {'status': 'error', 'resutls': error});
+							}else{
+								// console.log(connect);
+								socket.emit('build', {'status': 'suscess', 'resutls': data2.color});
+							}
+						});
+					}
+				});
+			}catch (error){
+				socket.emit('build', {'status': 'error', 'resutls': error});
+			}
 		});
 	})
 }
