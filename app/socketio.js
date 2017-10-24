@@ -1,10 +1,79 @@
 var Q = require('q');
+var request = require('request');
 var exec = require('child_process').exec;
 var path = require('./config').path;
 var connection = require('./config');
 var fs = require('fs');
 module.exports = function(io){
 	io.on('connection', function(socket){
+		var checknextbuild = function(domain, connect){
+			return Q.promise((respose)=>{
+				connect.job.get(domain, function(error, data){
+					if(error){
+						return respose('-1');
+					}else{
+						return respose(data.nextBuildNumber);
+					}
+				});
+			});
+		};
+
+		var checkuilderror = function(color, number){
+			if(color == 'blue'){
+				socket.emit('build', {'status': 'suscess', 'resutls': color});
+			}else{
+				socket.emit('build', {'status': 'error', 'number': number});
+			}
+		};
+
+		var runapi = function(domain, composer, importdb,callback){
+			console.log(composer);
+			console.log(importdb);
+			var headers = {
+			    'User-Agent':       'Super Agent/0.0.1',
+			    'Content-Type':     'application/x-www-form-urlencoded'
+			}
+
+		   var options1 = {
+		     url: 'http://aaaaautopushsqlaa.vicoders.com',
+		     method: 'POST',
+			 headers: headers,
+		     form: {'website': domain, 'select': 'command'}
+		   };
+		   var options2 = {
+		     url: 'http://aaaaautopushsqlaa.vicoders.com',
+		     method: 'POST',
+			 headers: headers,
+		     form: {'website': domain, 'select': 'database'}
+		   };
+		   if(!composer && !importdb){
+		   		return callback('next');
+		   }else if(composer == true && importdb == false){
+				request(options1, function (error, response, body){
+					if (!error && response.statusCode == 200) {
+	        			return callback('next');
+	    			}
+				});				
+			}else if(composer == false && importdb == true){
+				request(options2, function(error, respose, body){
+					if(!error && respose.statusCode == 200){
+						return callback('next');
+					}
+				});
+			}else if(composer == true && importdb == true){
+				request(options1, function (error, response, body){
+					if (!error && response.statusCode == 200) {
+						request(options2, function(error1, respose1, body1){
+							if(!error1 && respose1.statusCode == 200){
+								return callback('next');
+								console.log(body1);
+							}
+						});
+	    			}
+				});						
+			}
+		};
+
 		var framework = function(){
 			return Q.promise((respose)=>{
 				if(fs.existsSync(`wp-admin`)){
@@ -44,9 +113,6 @@ module.exports = function(io){
 			}
 		};
 
-		var sendcomand = function(){
-
-		}
 		socket.on('send command', function(command){
 			try {
 				var promise = function(){
@@ -103,6 +169,7 @@ module.exports = function(io){
 				socket.emit('false', err.message);
 			}
 		});
+
 		socket.on('cd', function(cd){
 			exec(`find -name "composer.json"`, function(error, data){
 				if(error){
@@ -133,29 +200,33 @@ module.exports = function(io){
 			let connectuser = `${build.user}connect`;
 			let connect = connection[connectuser];
 			try{
-				// var log = connect.build.logStream(build.domain, 4);
-
-				// log.on('data', function(text) {
-				//   process.stdout.write(text);
-				// });
-
-				// log.on('error', function(err) {
-				//   console.log('error', err);
-				// });
-
-				// log.on('end', function() {
-				//   console.log('end');
-				// });
-				connect.job.build(build.domain ,function(err, data){
-					if(err){
-					  	socket.emit('build', {'status': 'error', 'resutls': err});
+				checknextbuild(build.domain, connect)
+				.then((resutls)=>{
+					if(resutls == '-1'){
+						socket.emit('build', {'status': 'error', 'resutls': 'project not found'});
 					}else{
-						connect.job.get(build.domain,function(error, data2){
-							if(error){
-								socket.emit('build', {'status': 'error', 'resutls': error});
+						connect.job.build(build.domain ,function(err, data){
+							if(err){
+							  	socket.emit('build', {'status': 'error', 'resutls': err});
 							}else{
-								// console.log(connect);
-								socket.emit('build', {'status': 'suscess', 'resutls': data2.color});
+								var timeer = setInterval(function () {
+								    connect.job.get(build.domain, function(er,data){
+								    	let number = data.nextBuildNumber - 1;
+								    	if((data.nextBuildNumber -1) == resutls){
+								    		if(data.color == 'blue'){
+								    			runapi(build.domain, build.composer, build.importdb, function(next){
+								    				if(next == 'next'){
+									    				checkuilderror(data.color, number);
+									    				clearInterval(timeer);
+									    			}
+								    			});
+								    		}else{
+												socket.emit('build', {'status': 'error', 'number': number});
+												clearInterval(timeer);
+								    		}
+								    	}
+								    });
+								}, 30000); 
 							}
 						});
 					}
@@ -164,5 +235,23 @@ module.exports = function(io){
 				socket.emit('build', {'status': 'error', 'resutls': error});
 			}
 		});
-	})
+
+		socket.on('viewlog', function(viewlog){
+			let connectuser = `${viewlog.user}connect`;
+			let connect = connection[connectuser];
+			var log = connect.build.logStream(viewlog.domain, viewlog.numberbuild);
+
+			log.on('data', function(text) {
+			  socket.emit('viewlog', text);
+			});
+
+			log.on('error', function(err) {
+			  socket.emit('viewlog', err);
+			});
+
+			log.on('end', function() {
+			  socket.emit('viewlog', 'end');
+			});
+		});
+	});
 }

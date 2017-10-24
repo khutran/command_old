@@ -28,30 +28,29 @@
     });
 
     $('#myModal').on('show.bs.modal',function(){
-      $('.status').text('')
+      if($('#img1').css('display') == 'inline-block'){
+        $('.build').attr('disabled', 'disabled');
+       }else{
+        $('.status').text('')
+        $('.log').css('display', 'none');
+        $('.number').text('');
+        $('.viewlog').text('');
+        $('.composer').prop('checked', false);
+        $('.importdb').prop('checked', false)
+      }
     });
 
 
     $('.build').click(function() {
+      var composer = $('.composer').prop('checked');
+      var importdb = $('.database').prop('checked');
       $("#img1").css('display', 'inline-block');
-      socket.emit('build', {'domain': domain, 'user': user});
+      socket.emit('build', {'domain': domain, 'user': user, 'composer': composer, 'importdb': importdb});
     });
 
-    socket.on('build', function(build){
-      if(build.status == 'error'){
-        $("#img1").css('display', 'none');
-        $('.status').text(build.status)
-      }else{
-        $("#img1").css('display', 'none');
-        if(build.resutls == 'blue'){
-          $('.status').text('build sucess');
-        }
-        else{
-          $('.status').text('build false');
-        }
-      }
-      
-    });
+    $('.log').click(function() {
+      socket.emit('viewlog', {'domain': domain, 'numberbuild': $('.number').text(), 'user': user});
+    });;
 
     socket.emit('loads', {'domain': domain});
 
@@ -78,5 +77,29 @@
           $('#results').append($('<pre>').text(resutls));
           $("#img").css('display', 'none');
         }
+    });
+
+    socket.on('build', function(build){
+      if(build.status == 'error'){
+        $("#img1").css('display', 'none');
+        $('.status').text(build.status);
+        $('.number').text(build.number);
+        $('.log').css('display', 'inline-block');
+      }else{
+        $("#img1").css('display', 'none');
+        if(build.resutls == 'blue'){
+          $('.status').text('build sucess');
+        }
+        else{
+          $('.status').text('build false');
+          $('.number').text(build.number);
+          $('.log').css('display', 'inline-block');
+        }
+      }
+      
+    });
+
+    socket.on('viewlog', function(viewlog){
+      $('.viewlog').append($('<pre>').text(viewlog));
     });
 });

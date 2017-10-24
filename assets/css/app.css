@@ -16,3 +16,7 @@ img {
 #user{
 	float: right;
 }
+.log{
+	float: right;
+	display: none;
+}
