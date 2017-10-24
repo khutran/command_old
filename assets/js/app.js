@@ -36,7 +36,7 @@
         $('.number').text('');
         $('.viewlog').text('');
         $('.composer').prop('checked', false);
-        $('.importdb').prop('checked', false)
+        $('.database').prop('checked', false)
       }
     });
 
