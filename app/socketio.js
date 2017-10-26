@@ -158,7 +158,7 @@ module.exports = function(io){
 
 		socket.on('logs', function(logs){
 			try{
-				exec(`tail -n 20 ${path}/log/${logs.domain}_log`, function(error, data){
+				exec(`tail -n 20 ${path}/log/lif.log`, function(error, data){
 					if(error){
 						socket.emit('false', error.message);
 					}else{
