@@ -5,10 +5,7 @@ var x = require('./module');
 var dump = require('./module').dump;
 var connection = require('./config');
 var url = require('./config').url;
-var spawn = require('child_process').spawn;
-var mysql = require('./config').mysql;
-var stream = require('stream');
-var fs = require('fs');
+
 module.exports = function(app , passport){
 
 	app.get('/', function(req, res){
@@ -26,6 +23,11 @@ module.exports = function(app , passport){
 			res.render('load', {'name': req.session.userlogin, 'content': req.user});
 		}
 	);
+
+	app.get('/logout', function(req, res){
+        req.logout();
+        res.redirect('/');
+	});
 
 	app.get('/project/:id', x.loginM ,function(req, res){
 		res.render('project', {'domain': req.params.id, 'user': req.session.userlogin});
