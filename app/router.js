@@ -2,9 +2,13 @@ var LocalStrategy   = require('passport-local').Strategy;
 const objectAssign = require('object-assign');
 var jenkinsapi = require('jenkins');
 var x = require('./module');
+var dump = require('./module').dump;
 var connection = require('./config');
 var url = require('./config').url;
-
+var spawn = require('child_process').spawn;
+var mysql = require('./config').mysql;
+var stream = require('stream');
+var fs = require('fs');
 module.exports = function(app , passport){
 
 	app.get('/', function(req, res){

@@ -25,6 +25,7 @@
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "socket.io": "^2.0.3",
+    "stream": "0.0.2",
     "superagent": "^3.7.0"
   }
 }

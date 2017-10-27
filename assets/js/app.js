@@ -41,6 +41,7 @@
     });
 
 
+
     $('.build').click(function() {
       var composer = $('.composer').prop('checked');
       var importdb = $('.database').prop('checked');
@@ -52,7 +53,21 @@
       socket.emit('viewlog', {'domain': domain, 'numberbuild': $('.number').text(), 'user': user});
     });;
 
+    $('.download').click(function() {
+        socket.emit('dump', {'domain': domain});
+    });
+
     socket.emit('loads', {'domain': domain});
+
+    socket.on('dump', function(dump){
+      if(dump.status == 'suscess'){
+        var url = '/download/'+dump.database+'.sql';
+        window.location.href = url;
+        return false;
+      }else if(dump.status == 'error'){
+        $('#results').append($('<pre>').text(dump.error));
+      }
+    });
 
     socket.on('loads', function(loads){
       $('#loads').empty();
