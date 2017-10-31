@@ -57,7 +57,7 @@ module.exports = function(io){
 		     form: {'website': domain, 'select': 'database'}
 		   };
 		   if(!composer && !importdb){
-		   		return callback('next');
+		   		return callback({'status':'next'});
 		   }else if(composer == true && importdb == false){
 				request(options1, function (error, response, body){
 					if (!error && response.statusCode == 200) {
