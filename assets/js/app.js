@@ -37,6 +37,7 @@
         $('.viewlog').text('');
         $('.composer').prop('checked', false);
         $('.database').prop('checked', false)
+        $('.logapi').text('');
       }
     });
 
@@ -46,10 +47,15 @@
       var composer = $('.composer').prop('checked');
       var importdb = $('.database').prop('checked');
       $("#img1").css('display', 'inline-block');
+      $('.status').text('');
+      $('.number').text('');
+      $('.log').css('display', 'none');
+      $('.logapi').text('');
       socket.emit('build', {'domain': domain, 'user': user, 'composer': composer, 'importdb': importdb});
     });
 
     $('.log').click(function() {
+      $('.viewlog').text('');
       socket.emit('viewlog', {'domain': domain, 'numberbuild': $('.number').text(), 'user': user});
     });;
 
@@ -95,20 +101,30 @@
     });
 
     socket.on('build', function(build){
+
       if(build.status == 'error'){
         $("#img1").css('display', 'none');
         $('.status').text(build.status);
         $('.number').text(build.number);
         $('.log').css('display', 'inline-block');
+        if(build.body){
+          $('.logapi').text(build.body)
+        }
       }else{
         $("#img1").css('display', 'none');
         if(build.resutls == 'blue'){
           $('.status').text('build sucess');
+          if(build.body){
+           $('.logapi').text(build.body)
+          }
         }
         else{
           $('.status').text('build false');
           $('.number').text(build.number);
           $('.log').css('display', 'inline-block');
+            if(build.body){
+              $('.logapi').text(build.body)
+            }
         }
       }
       

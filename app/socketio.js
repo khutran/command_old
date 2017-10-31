@@ -9,6 +9,7 @@ var mysql = require('./config').mysql;
 
 module.exports = function(io){
 	io.on('connection', function(socket){
+
 		var checknextbuild = function(domain, connect){
 			return Q.promise((respose)=>{
 				connect.job.get(domain, function(error, data){
@@ -29,9 +30,15 @@ module.exports = function(io){
 			}
 		};
 
+		var buildapierror = function(color, number, body){
+			if(color == 'blue'){
+				socket.emit('build', {'status': 'suscess', 'resutls': color, 'body': body});
+			}else{
+				socket.emit('build', {'status': 'error', 'number': number, 'body': body});
+			}			
+		};
+
 		var runapi = function(domain, composer, importdb,callback){
-			console.log(composer);
-			console.log(importdb);
 			var headers = {
 			    'User-Agent':       'Super Agent/0.0.1',
 			    'Content-Type':     'application/x-www-form-urlencoded'
@@ -54,24 +61,46 @@ module.exports = function(io){
 		   }else if(composer == true && importdb == false){
 				request(options1, function (error, response, body){
 					if (!error && response.statusCode == 200) {
-	        			return callback('next');
+						body = body.replace(/\[\"/gi, "");
+						body = body.replace(/\"\]/gi, "");
+						if(body.indexOf('errorxxx') != -1){
+							return callback({'status':'apierror', 'body': body});
+						}else{
+							return callback({'status':'next', 'body': body});
+						}
 	    			}
 				});				
 			}else if(composer == false && importdb == true){
 				request(options2, function(error, respose, body){
 					if(!error && respose.statusCode == 200){
-						return callback('next');
+						body = body.replace(/\[\"/gi, "");
+						body = body.replace(/\"\]/gi, "");
+						if(body.indexOf('errorxxx') != -1){
+							return callback({'status':'apierror', 'body': body});
+						}else{
+							return callback({'status':'next', 'body': body});
+						}
 					}
 				});
 			}else if(composer == true && importdb == true){
 				request(options1, function (error, response, body){
-					if (!error && response.statusCode == 200) {
+				// 	console.log(body);
+					if (!error && response.statusCode == 200 && body.indexOf('errorxxx') == -1) {
 						request(options2, function(error1, respose1, body1){
 							if(!error1 && respose1.statusCode == 200){
-								return callback('next');
-								console.log(body1);
+								body1 = body1.replace(/\[\"/gi, "");
+								body1 = body1.replace(/\"\]/gi, "");
+								if(body1.indexOf('errorxxx') != -1){
+									return callback({'status':'apierror', 'body': body1});
+								}else{
+									return callback({'status':'next', 'body': body1});
+								}
 							}
 						});
+	    			}else{
+						body = body.replace(/\[\"/gi, "");
+						body = body.replace(/\"\]/gi, "");
+	    				return callback({'status':'apierror', 'body': body});
 	    			}
 				});						
 			}
@@ -218,8 +247,11 @@ module.exports = function(io){
 								    	if((data.nextBuildNumber -1) == resutls){
 								    		if(data.color == 'blue' || data.color == 'grey'){
 								    			runapi(build.domain, build.composer, build.importdb, function(next){
-								    				if(next == 'next'){
+								    				if(next.status == 'next'){
 									    				checkuilderror(data.color, number);
+									    				clearInterval(timeer);
+									    			}else if(next.status == 'apierror'){
+									    				buildapierror(data.color, number, next.body);
 									    				clearInterval(timeer);
 									    			}
 								    			});

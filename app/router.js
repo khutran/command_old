@@ -17,6 +17,16 @@ module.exports = function(app , passport){
 		}
 	});
 
+	app.get('/login', function(req, res){
+		console.log(req);
+		if (req.isAuthenticated()){
+			res.render('load', {'name': req.session.userlogin, 'content': req.user});
+			res.end();
+		}else{
+			res.render('index', {'mesage': 'login'});
+		}
+	});
+
 	app.post('/user', passport.authenticate('login', {failureRedirect: '/'}), 
 		function(req, res){
 			req.session.userlogin = req.body.username;
