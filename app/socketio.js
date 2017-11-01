@@ -291,7 +291,7 @@ module.exports = function(io){
 
 		socket.on('dump', function(dump){
 			var finddatabase = function(domain, callback){
-				var WPDBNAME=`cat wp-config.php | grep DB_NAME`;
+				var WPDBNAME=`cat ${path}/web/${domain}/workspace/wp-config.php | grep DB_NAME`;
 				exec(WPDBNAME, function(error, data){
 					if(error){
 						return callback({'stt': 'error', 'error': error.message});

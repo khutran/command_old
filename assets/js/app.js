@@ -60,6 +60,7 @@
     });;
 
     $('.download').click(function() {
+        $('#results').empty();
         socket.emit('dump', {'domain': domain});
     });
 
