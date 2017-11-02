@@ -1,5 +1,4 @@
 module.exports = {
-	'url': 'project.vicoders.com',
 	'path': '/var/www',
 	'mysql': {
 		'host': 'localhost',

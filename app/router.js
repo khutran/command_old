@@ -4,7 +4,6 @@ var jenkinsapi = require('jenkins');
 var x = require('./module');
 var dump = require('./module').dump;
 var connection = require('./config');
-var url = require('./config').url;
 
 module.exports = function(app , passport){
 
@@ -68,8 +67,11 @@ module.exports = function(app , passport){
 	});
 
 	passport.use('login', new LocalStrategy(
-		function(user, pass, done) {
-			var urllogin = `http://${user}:${pass}@${url}`;
+		{
+			passReqToCallback : true
+		},
+		function(req, user, pass, done) {
+			var urllogin = `http://${user}:${pass}@${req.body.hosts}`;
 			var connect = jenkinsapi({baseUrl: urllogin, crumbIssuer: true});
 			var userconnects = user+'connect'
 			var userconnect = [];
