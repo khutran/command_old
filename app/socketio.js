@@ -235,11 +235,11 @@ module.exports = function(io){
 				checknextbuild(build.domain, connect)
 				.then((resutls)=>{
 					if(resutls == '-1'){
-						socket.emit('build', {'status': 'error', 'resutls': 'project not found'});
+						socket.emit('build', {'status': 'error', 'body': 'project not found'});
 					}else{
 						connect.job.build(build.domain ,function(err, data){
 							if(err){
-							  	socket.emit('build', {'status': 'error', 'resutls': err});
+							  	socket.emit('build', {'status': 'error', 'body': err});
 							}else{
 								var timeer = setInterval(function () {
 								    connect.job.get(build.domain, function(er,data){
@@ -267,7 +267,7 @@ module.exports = function(io){
 					}
 				});
 			}catch (error){
-				socket.emit('build', {'status': 'error', 'resutls': error});
+				socket.emit('build', {'status': 'error', 'body': error});
 			}
 		});
 
