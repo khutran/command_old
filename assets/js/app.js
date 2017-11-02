@@ -1,7 +1,9 @@
+ 
   $(function () {
     var socket = io();
     var domain = $('span#domain').text();
     var user = $('#user span').text();
+
     $('#send').click(function(){
       $('#results').empty();
       $("#img").css('display', 'inline-block');
@@ -102,7 +104,7 @@
     });
 
     socket.on('build', function(build){
-
+      $('.color').attr('src', '/assets/images/'+build.resutls+'.png');
       if(build.status == 'error'){
         $("#img1").css('display', 'none');
         $('.status').text(build.status);
@@ -113,7 +115,7 @@
         }
       }else{
         $("#img1").css('display', 'none');
-        if(build.resutls == 'blue'){
+        if(build.resutls == 'blue' || build.resutls == 'grey'){
           $('.status').text('build sucess');
           if(build.body){
            $('.logapi').text(build.body)

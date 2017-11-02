@@ -3,13 +3,19 @@ img {
     vertical-align: middle;
     display: none;
 }
-
+img.color {
+	display: inline-block;
+	
+}
+.list{
+	margin-left: 150px;
+}
 #wordpress {
     display: none;
 }
-/*.status{
-	display: none;
-}*/
+#myModal{
+	margin-top: 50px;
+}
 #nut{
 	margin-top: 10px;
 }

@@ -33,14 +33,31 @@ module.exports = function(app , passport){
 			res.render('load', {'name': req.session.userlogin, 'content': req.user});
 		}
 	);
-
+	app.get('/user', x.loginM, function(req, res){
+			var connectuser = req.session.userlogin+'connect';
+			connection[connectuser].view.get(req.session.userlogin, function(error, data){
+				if(!error){
+					objectAssign(req.user, data.jobs);
+					res.render('load', {'name': req.session.userlogin, 'content': data.jobs});
+				}else{
+					res.render('load', {'name': req.session.userlogin, 'content': {}});
+				}
+			});
+		}
+	);
 	app.get('/logout', function(req, res){
         req.logout();
         res.redirect('/');
 	});
 
 	app.get('/project/:id', x.loginM ,function(req, res){
-		res.render('project', {'domain': req.params.id, 'user': req.session.userlogin});
+		var color = '';
+		req.user.forEach(function(item){
+			if(item.name == req.params.id){
+				color = item.color;
+			}
+		});
+		res.render('project', {'domain': req.params.id, 'user': req.session.userlogin, 'color': color});
 	});
 	passport.serializeUser(function(user, done) {
 	  done(null, user);

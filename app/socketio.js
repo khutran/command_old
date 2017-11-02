@@ -23,18 +23,18 @@ module.exports = function(io){
 		};
 
 		var checkuilderror = function(color, number){
-			if(color == 'blue'){
+			if(color == 'blue' || color == 'grey'){
 				socket.emit('build', {'status': 'suscess', 'resutls': color});
 			}else{
-				socket.emit('build', {'status': 'error', 'number': number});
+				socket.emit('build', {'status': 'error', 'resutls': color, 'number': number});
 			}
 		};
 
 		var buildapierror = function(color, number, body){
-			if(color == 'blue'){
+			if(color == 'blue' || color == 'grey'){
 				socket.emit('build', {'status': 'suscess', 'resutls': color, 'body': body});
 			}else{
-				socket.emit('build', {'status': 'error', 'number': number, 'body': body});
+				socket.emit('build', {'status': 'error', 'resutls': color, 'number': number, 'body': body});
 			}			
 		};
 
@@ -256,7 +256,7 @@ module.exports = function(io){
 									    			}
 								    			});
 								    		}else{
-												socket.emit('build', {'status': 'error', 'number': number});
+												socket.emit('build', {'status': 'error', 'resutls': data.color, 'number': number});
 												clearInterval(timeer);
 								    		}
 								    	}
