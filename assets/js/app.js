@@ -104,7 +104,9 @@
     });
 
     socket.on('build', function(build){
-      $('.color').attr('src', '/assets/images/'+build.resutls+'.png');
+      if(build.resutls){
+        $('.color').attr('src', '/assets/images/'+build.resutls+'.png');
+      }
       if(build.status == 'error'){
         $("#img1").css('display', 'none');
         $('.status').text(build.status);
