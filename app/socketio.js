@@ -245,7 +245,7 @@ module.exports = function(io){
 								    connect.job.get(build.domain, function(er,data){
 								    	let number = data.nextBuildNumber - 1;
 								    	if((data.nextBuildNumber -1) == resutls){
-								    		if(data.color == 'blue' || data.color == 'grey'){
+								    		if(data.color == 'blue' || data.color == 'blue_anime'){
 								    			runapi(build.domain, build.composer, build.importdb, function(next){
 								    				if(next.status == 'next'){
 									    				checkuilderror(data.color, number);
@@ -255,7 +255,10 @@ module.exports = function(io){
 									    				clearInterval(timeer);
 									    			}
 								    			});
-								    		}else{
+								    		}else if(data.color == 'grep' || data.color == 'grey_anime' || data.color == 'green_anime'){
+								    				
+								    		}
+								    		else{
 												socket.emit('build', {'status': 'error', 'resutls': data.color, 'number': number});
 												clearInterval(timeer);
 								    		}
