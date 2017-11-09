@@ -4,6 +4,8 @@ var jenkinsapi = require('jenkins');
 var x = require('./module');
 var dump = require('./module').dump;
 var connection = require('./config');
+// var stream = require('stream');
+// var contentsql = new stream.PassThrough();
 
 module.exports = function(app , passport){
 
@@ -47,6 +49,12 @@ module.exports = function(app , passport){
 	app.get('/logout', function(req, res){
         req.logout();
         res.redirect('/');
+	});
+
+	app.get('/download', x.loginM, function(req, res){
+		var domain = req.query.domain;
+		dump(res, domain);
+
 	});
 
 	app.get('/project/:id', x.loginM ,function(req, res){

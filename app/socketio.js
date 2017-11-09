@@ -5,7 +5,7 @@ var path = require('./config').path;
 var connection = require('./config');
 const fs = require('fs');
 var spawn = require('child_process').spawn;
-var mysql = require('./config').mysql;
+
 
 module.exports = function(io){
 	io.on('connection', function(socket){
@@ -292,39 +292,39 @@ module.exports = function(io){
 			});
 		});
 
-		socket.on('dump', function(dump){
-			var finddatabase = function(domain, callback){
-				var WPDBNAME=`cat ${path}/web/${domain}/workspace/wp-config.php | grep DB_NAME`;
-				exec(WPDBNAME, function(error, data){
-					if(error){
-						return callback({'stt': 'error', 'error': error.message});
-					}else{
-						var arr = data.split("\n");
-						return callback({'stt': 'suscess', 'data':arr[0].slice(19, -3)});
-					}
-				});		
-			};
-			finddatabase(dump.domain, function(resutls){
-				if(resutls.stt == 'error'){
-					socket.emit('dump', {'status': 'error', 'error': resutls.error});
-				}else if(resutls.stt == 'suscess'){
-					var dumpdatabase = spawn('mysqldump', [
-					 '-u' + mysql.user,
-					 '-p' + mysql.password,
-					 '-h' + mysql.host,
-					 resutls.data,
-					 '--default-character-set=utf8',
-					 '--comments'
-					]);
-					var wstream = fs.createWriteStream(__dirname + '/../download/'+resutls.data+'.sql', 'utf8');
-					dumpdatabase.stdout.pipe(wstream);
-					wstream.on('finish',function(){
-						socket.emit('dump', {'status': 'suscess', 'database': resutls.data});
-					});
-				}else{
-					socket.emit('dump', {'status': 'error', 'error': 'error farta'});
-				}
-			});
-		});
+		// socket.on('dump', function(dump){
+		// 	var finddatabase = function(domain, callback){
+		// 		var WPDBNAME=`cat ${path}/web/${domain}/workspace/wp-config.php | grep DB_NAME`;
+		// 		exec(WPDBNAME, function(error, data){
+		// 			if(error){
+		// 				return callback({'stt': 'error', 'error': error.message});
+		// 			}else{
+		// 				var arr = data.split("\n");
+		// 				return callback({'stt': 'suscess', 'data':arr[0].slice(19, -3)});
+		// 			}
+		// 		});		
+		// 	};
+		// 	finddatabase(dump.domain, function(resutls){
+		// 		if(resutls.stt == 'error'){
+		// 			socket.emit('dump', {'status': 'error', 'error': resutls.error});
+		// 		}else if(resutls.stt == 'suscess'){
+		// 			var dumpdatabase = spawn('mysqldump', [
+		// 			 '-u' + mysql.user,
+		// 			 '-p' + mysql.password,
+		// 			 '-h' + mysql.host,
+		// 			 resutls.data,
+		// 			 '--default-character-set=utf8',
+		// 			 '--comments'
+		// 			]);
+		// 			var wstream = fs.createWriteStream(__dirname + '/../download/'+resutls.data+'.sql', 'utf8');
+		// 			dumpdatabase.stdout.pipe(wstream);
+		// 			wstream.on('finish',function(){
+		// 				socket.emit('dump', {'status': 'suscess', 'database': resutls.data});
+		// 			});
+		// 		}else{
+		// 			socket.emit('dump', {'status': 'error', 'error': 'error farta'});
+		// 		}
+		// 	});
+		// });
 	});
 }

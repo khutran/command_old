@@ -63,20 +63,22 @@
 
     $('.download').click(function() {
         $('#results').empty();
-        socket.emit('dump', {'domain': domain});
+        // socket.emit('dump', {'domain': domain});
+        var url = '/download?domain='+domain;
+        window.location.href = url;
     });
 
     socket.emit('loads', {'domain': domain});
 
-    socket.on('dump', function(dump){
-      if(dump.status == 'suscess'){
-        var url = '/download/'+dump.database+'.sql';
-        window.location.href = url;
-        return false;
-      }else if(dump.status == 'error'){
-        $('#results').append($('<pre>').text(dump.error));
-      }
-    });
+    // socket.on('dump', function(dump){
+    //   if(dump.status == 'suscess'){
+    //     var url = '/download/'+dump.database+'.sql';
+    //     window.location.href = url;
+    //     return false;
+    //   }else if(dump.status == 'error'){
+    //     $('#results').append($('<pre>').text(dump.error));
+    //   }
+    // });
 
     socket.on('loads', function(loads){
       $('#loads').empty();
