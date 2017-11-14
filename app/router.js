@@ -74,7 +74,6 @@ module.exports = function(app , passport){
 		function(req, user, pass, done) {
 			var urllogin = `http://${user}:${pass}@${req.body.hosts}`;
 			var connect = jenkinsapi({baseUrl: urllogin, crumbIssuer: true});
-			// console.log(connect);
 			var userconnects = user+'connect'
 			var userconnect = [];
 			userconnect[userconnects] = connect;

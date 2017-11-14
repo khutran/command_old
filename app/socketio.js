@@ -20,6 +20,7 @@ module.exports = function(io){
 				}
 			});
 			listuser.push(user);
+			socket.broadcast.emit('noticationalluser', user);
 		});
 
 		socket.on('checklogin', function(data){
@@ -31,11 +32,14 @@ module.exports = function(io){
 		});
 
 		socket.on('disconnect', function(data){
+			var userout = ''
 			listuser.forEach(function(value, key){
 				if(value.id_socket == socket.id){
 					listuser.splice(key, 1);
+					userout = value.user;
 				}
 			});
+			socket.broadcast.emit('noticationalluserout', userout);
 		});
 
 		socket.on('loaduser', function(){

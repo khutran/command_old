@@ -143,13 +143,22 @@
 
     socket.on('connect', function(){
     	socket.emit('userlogin', {'user': user});
+
     });
 
     socket.emit('loaduser');
 
     socket.on('loaduser', function(data){
     	data.forEach(function(user){
-    		$('.showuser').append(`<li>${user.user}</li>`)
+    		$('.showuser').append(`<li class='${data.user}_i'>${user.user}</li>`)
     	});
+    });
+
+    socket.on('noticationalluser', function(data){
+    	$('.showuser').append(`<li class='${data.user}_i'>${data.user}</li>`)
+    });
+
+    socket.on('noticationalluserout', function(data){
+    	$('li').remove(`.${data}_i`);
     });
 });
