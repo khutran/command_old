@@ -23,8 +23,8 @@ module.exports = function(io){
 		});
 
 		socket.on('checklogin', function(data){
-			listuser.forEach(function(items){
-				if(items.user == data.user)
+			listuser.forEach(function(xxx, key){
+				if(xxx.user == data.user)
 					socket.emit('checklogin', data);
 			});
 		});
