@@ -26,6 +26,8 @@ module.exports = function(io){
 			listuser.forEach(function(xxx, key){
 				if(xxx.user == data.user){
 					socket.emit('checklogin', data);
+				}else{
+					return;
 				}
 			});
 		});
