@@ -4,22 +4,13 @@ var jenkinsapi = require('jenkins');
 var x = require('./module');
 var dump = require('./module').dump;
 var connection = require('./config');
+var listuser = require('./config').listuser;
 // var stream = require('stream');
 // var contentsql = new stream.PassThrough();
 
 module.exports = function(app , passport){
 
 	app.get('/', function(req, res){
-		if (req.isAuthenticated()){
-			res.render('load', {'name': req.session.userlogin, 'content': req.user});
-			res.end();
-		}else{
-			res.render('index', {'mesage': 'login'});
-		}
-	});
-
-	app.get('/login', function(req, res){
-		console.log(req);
 		if (req.isAuthenticated()){
 			res.render('load', {'name': req.session.userlogin, 'content': req.user});
 			res.end();
@@ -46,6 +37,8 @@ module.exports = function(app , passport){
 			});
 		}
 	);
+
+
 	app.get('/logout', function(req, res){
         req.logout();
         res.redirect('/');
@@ -81,6 +74,7 @@ module.exports = function(app , passport){
 		function(req, user, pass, done) {
 			var urllogin = `http://${user}:${pass}@${req.body.hosts}`;
 			var connect = jenkinsapi({baseUrl: urllogin, crumbIssuer: true});
+			console.log(connect);
 			var userconnects = user+'connect'
 			var userconnect = [];
 			userconnect[userconnects] = connect;
@@ -94,4 +88,5 @@ module.exports = function(app , passport){
 			});				
 		}
 	));
+
 }

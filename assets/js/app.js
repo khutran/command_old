@@ -140,4 +140,16 @@
     socket.on('viewlog', function(viewlog){
       $('.viewlog').append($('<pre>').text(viewlog));
     });
+
+    socket.on('connect', function(){
+    	socket.emit('userlogin', {'user': user});
+    });
+
+    socket.emit('loaduser');
+
+    socket.on('loaduser', function(data){
+    	data.forEach(function(user){
+    		$('.showuser').append(`<li>${user.user}</li>`)
+    	});
+    });
 });

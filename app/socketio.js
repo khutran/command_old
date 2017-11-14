@@ -5,9 +5,43 @@ var path = require('./config').path;
 var connection = require('./config');
 const fs = require('fs');
 var spawn = require('child_process').spawn;
-
+var listuser = require('./config').listuser;
 
 module.exports = function(io){
+
+	io.on('connection', function(socket){
+
+		socket.on('userlogin', function(data){
+			var user = {'user': data.user, 'id_socket': socket.id};
+
+			listuser.forEach(function(value, key){
+				if(value.user == data.user){
+					listuser.splice(key, 1);
+				}
+			});
+			listuser.push(user);
+		});
+
+		socket.on('checklogin', function(data){
+			listuser.forEach(function(items){
+				if(items.user == data.user)
+					socket.emit('checklogin', data);
+			});
+		});
+
+		socket.on('disconnect', function(data){
+			listuser.forEach(function(value, key){
+				if(value.id_socket == socket.id){
+					listuser.splice(key, 1);
+				}
+			});
+		});
+
+		socket.on('loaduser', function(){
+			socket.emit('loaduser', listuser);
+		});
+	});
+
 	io.on('connection', function(socket){
 
 		var checknextbuild = function(domain, connect){
