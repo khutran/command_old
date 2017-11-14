@@ -23,7 +23,6 @@ module.exports = function(io){
 		});
 
 		socket.on('checklogin', function(data){
-			console.log(listuser);
 			listuser.forEach(function(xxx, key){
 				if(xxx.user == data.user){
 					socket.emit('checklogin', data);
