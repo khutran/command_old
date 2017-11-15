@@ -11,7 +11,6 @@ module.exports = function(io){
 
 	io.on('connection', function(socket){
 
-		// console.log(socket.server);
 		socket.on('userlogin', function(data){
 			var user = {'user': data.user, 'id_socket': socket.id};
 
@@ -63,7 +62,7 @@ module.exports = function(io){
 		};
 
 		var checkuilderror = function(color, number){
-			if(color == 'blue' || color == 'grey'){
+			if(color == 'blue' || color == 'blue_anime'){
 				socket.emit('build', {'status': 'suscess', 'resutls': color});
 			}else{
 				socket.emit('build', {'status': 'error', 'resutls': color, 'number': number});
@@ -284,7 +283,7 @@ module.exports = function(io){
 								var timeer = setInterval(function () {
 								    connect.job.get(build.domain, function(er,data){
 								    	let number = data.nextBuildNumber - 1;
-								    	if((data.nextBuildNumber -1) == resutls){
+								    	if(number == resutls){
 								    		if(data.color == 'blue' || data.color == 'blue_anime'){
 								    			runapi(build.domain, build.composer, build.importdb, function(next){
 								    				if(next.status == 'next'){
@@ -295,7 +294,7 @@ module.exports = function(io){
 									    				clearInterval(timeer);
 									    			}
 								    			});
-								    		}else if(data.color == 'grep' || data.color == 'grey_anime' || data.color == 'green_anime'){
+								    		}else if(data.color == 'grey' || data.color == 'grey_anime' || data.color == 'green_anime'){
 								    				
 								    		}
 								    		else{

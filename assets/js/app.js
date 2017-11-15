@@ -155,10 +155,15 @@
     });
 
     socket.on('noticationalluser', function(data){
-    	$('.showuser').append(`<li class='${data.user}_i'>${data.user}</li>`)
+      if($(`.${data.user}_i`)){
+        return;
+      }else{
+        $('.showuser').append(`<li class='${data.user}_i'>${data.user}</li>`)
+      }
     });
 
     socket.on('noticationalluserout', function(data){
     	$('li').remove(`.${data}_i`);
     });
+
 });
