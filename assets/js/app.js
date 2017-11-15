@@ -150,7 +150,7 @@
 
     socket.on('loaduser', function(data){
     	data.forEach(function(user){
-    		$('.showuser').append(`<li class='${data.user}_i'>${user.user}</li>`)
+    		$('.showuser').append(`<li class='${user.user}_i'>${user.user}</li>`)
     	});
     });
 

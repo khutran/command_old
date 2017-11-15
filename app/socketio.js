@@ -11,6 +11,7 @@ module.exports = function(io){
 
 	io.on('connection', function(socket){
 
+		// console.log(socket.server);
 		socket.on('userlogin', function(data){
 			var user = {'user': data.user, 'id_socket': socket.id};
 
