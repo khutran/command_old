@@ -155,7 +155,8 @@
     });
 
     socket.on('noticationalluser', function(data){
-      if($(`.${data.user}_i`)){
+      var data_user = $(`.${data.user}_i`).val();
+      if(data_user == 'undefined'){
         return;
       }else{
         $('.showuser').append(`<li class='${data.user}_i'>${data.user}</li>`)
