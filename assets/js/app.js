@@ -102,6 +102,7 @@
         list.push(minifile);
       }
       if(loads.framework == 'wordpress'){
+        $('.text-last').css('display', 'inherit');
         $("#wordpress").css('display', 'inline-block');
           list.forEach(function(value, keys){
             value.forEach(function(value2, keys2){

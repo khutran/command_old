@@ -23,6 +23,7 @@ button {
 .main {
   padding-bottom: 20px; }
   .main .content, .main .text-last {
+    display: none;
     padding: 20px;
     padding-top: 0px;
     padding-bottom: 50px;
