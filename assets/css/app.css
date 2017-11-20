@@ -8,10 +8,6 @@ img.color {
 	width: 25px;
 	display: inline-block;
 }
-img.color {
-	width: 20px;
-	display: none;
-}
 
 img#img{
     width: 40px;
