@@ -23,11 +23,19 @@
       if(display == 'node'){
         return;
       }else{
-        $('#loads').empty();
+        $('.loads').empty();
         socket.emit('cd', {'domain': domain});
         $(this).css('display', 'none');
+        $('#back').css('display', 'inline-block');
       }
     });
+
+    $('#back').click(function(event) {
+      $('.loads').empty();
+      socket.emit('loads', {'domain': domain});
+      $(this).css('display', 'none');
+      $('#wordpress').css('display', 'inline-block');
+    });;
 
     $('#myModal').on('show.bs.modal',function(){
       if($('#img1').css('display') == 'inline-block'){
@@ -84,11 +92,30 @@
 
     socket.on('loads', function(loads){
       $('#loads').empty();
+      var listfile =  loads.resutls.split('\n');
+      var dem = listfile.length/3;
+      var list = [];
+      var dem1 = 0;
+      for(i = 0 ; i < 3; i++){
+        var minifile = listfile.slice(dem1, Math.round(dem) + dem1);
+        dem1 = dem1 + Math.round(dem);
+        list.push(minifile);
+      }
       if(loads.framework == 'wordpress'){
         $("#wordpress").css('display', 'inline-block');
-        $('#loads').append($('<pre>').text(loads.resutls));
+          list.forEach(function(value, keys){
+            value.forEach(function(value2, keys2){
+              $(`#loads${keys}`).append($('<li>').text(value2));
+            });
+          });
       }else{
-        $('#loads').append($('<pre>').text(loads.resutls));
+        list.forEach(function(value, keys){
+          value.forEach(function(value2, keys2){
+            console.log(value2);
+            // if(value2)
+            $(`#loads${keys}`).append($('<li>').text(value2));
+          });
+        });
       }
     });
 

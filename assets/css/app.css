@@ -22,9 +22,6 @@ img#img{
 .list{
 	margin-left: 150px;
 }
-#wordpress {
-    display: none;
-}
 #myModal{
 	margin-top: 50px;
 }
@@ -55,4 +52,19 @@ pre{
     margin-top: 15px;
 	margin-left: -42px;
 	margin-right: -1px;
+}
+
+.loads{
+	display: inline-block;
+	list-style: none;
+	width: 250px;
+	vertical-align: top;
+	margin-top: 10px;
+	padding-left: 10px;
+}
+#wordpress {
+    display: none;
+}
+#back {
+    display: none;
 }

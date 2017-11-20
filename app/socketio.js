@@ -160,9 +160,9 @@ module.exports = function(io){
 			if(!domain){
 				exec('ls', function(error, data){
 					if(error){
-						socket.emit('loads',{'resutls':error.message, 'framework': framework});
+						socket.emit('loads',{'resutls':error.message, 'framework': 'framework'});
 					}else{
-						socket.emit('loads',{'resutls': data, 'framework': framework});
+						socket.emit('loads',{'resutls': data, 'framework': 'framework'});
 					}
 				});				
 			}else{
