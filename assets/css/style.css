@@ -1,0 +1,91 @@
+/* style for header */
+button {
+  background: #2980b9;
+  color: #fff;
+  float: right;
+  margin-top: 10px;
+  border: 2px solid #2980b9;
+  margin-right: 10px;
+  padding: 5px 20px;
+  text-align: center; }
+
+.header .navbar {
+  margin-bottom: 0;
+  background: #fff;
+  box-shadow: 1px 1px 9px #666;
+  border-radius: 0; }
+  .header .navbar .navbar-brand {
+    color: #2980b9; }
+  .header .navbar ul li a.logout {
+    color: #2980b9; }
+
+/* style for main */
+.main {
+  padding-bottom: 20px; }
+  .main .content, .main .text-last {
+    padding: 20px;
+    padding-top: 0px;
+    padding-bottom: 50px;
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+  }
+  .main .text-last {
+    height: 100px; }
+  .main .themes {
+    padding: 20px;
+    padding-top: 0px;
+    padding-bottom: 50px;
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    margin-top: 10px; }
+    .main .themes button {
+      margin-right: 0px; }
+  .main .command {
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    padding: 10px;
+    padding-bottom: 45px;
+    height: 100%; }
+    .main .command .text {
+      padding-top: 10px;
+      float: left;
+      font-weight: bold; }
+      .main .command .text p {
+        margin-right: 10px;
+        margin-left: 20px; }
+    .main .command .textarea {
+      float: left;
+      margin-right: 10px; }
+      .main .command .textarea input {
+        width: 570px;
+        background: #eeeeee;
+        border: 1px solid #d2d2d2;
+        height: 35px; }
+    .main .command .button {
+      float: left; }
+      .main .command .button button {
+        margin-top: 0px;
+        margin-right: 0px; }
+  .main .show-log {
+    float: left;
+    background: #fff;
+    color: #2980b9; }
+  .main .buid-project {
+    float: left; }
+  .main .dowload {
+    float: left; }
+  .main .online-user {
+    border: 1px solid #d2d2d2;
+    border-radius: 3px;
+    color: #2980b9; }
+    .main .online-user h2 {
+      font-weight: bold;
+      border-bottom: 1px solid #ccc;
+      padding: 10px; }
+    .main .online-user .list-group .list-group-item {
+      border: 0; }
+
+/*# sourceMappingURL=style.css.map */

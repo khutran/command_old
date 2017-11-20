@@ -33,6 +33,7 @@
       if($('#img1').css('display') == 'inline-block'){
         $('.build').attr('disabled', 'disabled');
        }else{
+        $('.build').removeAttr('disabled');
         $('.status').text('')
         $('.log').css('display', 'none');
         $('.number').text('');
@@ -49,6 +50,7 @@
       var composer = $('.composer').prop('checked');
       var importdb = $('.database').prop('checked');
       $("#img1").css('display', 'inline-block');
+      $('.build').attr('disabled', 'disabled');
       $('.status').text('');
       $('.number').text('');
       $('.log').css('display', 'none');
@@ -114,10 +116,12 @@
         $('.status').text(build.status);
         $('.number').text(build.number);
         $('.log').css('display', 'inline-block');
+        $('.build').removeAttr('disabled');
         if(build.body){
           $('.logapi').text(build.body)
         }
       }else{
+        $('.build').removeAttr('disabled');
         $("#img1").css('display', 'none');
         if(build.resutls == 'blue' || build.resutls == 'grey'){
           $('.status').text('build sucess');
@@ -150,7 +154,7 @@
 
     socket.on('loaduser', function(data){
     	data.forEach(function(user){
-    		$('.showuser').append(`<li class='${user.user}_i'>${user.user}</li>`)
+    		$('.showuser').append(`<li class="${user.user}_i list-group-item"><i class="fa fa-user-o" aria-hidden="true"></i> ${user.user}</li>`)
     	});
     });
 
@@ -159,7 +163,7 @@
       if(data_user == 'undefined'){
         return;
       }else{
-        $('.showuser').append(`<li class='${data.user}_i'>${data.user}</li>`)
+        $('.showuser').append(`<li class="${data.user}_i list-group-item" ><i class="fa fa-user-o" aria-hidden="true"></i> ${data.user}</li>`)
       }
     });
 

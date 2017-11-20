@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="/assets/css/app.css">
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/assets/js/app.js"></script>
+
+<head>
+    <title>project</title>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-sm-10">
+            <h1>Project :<span id="domain"><%= domain %><img class="color" src="/assets/images/<%= color %>.png"></span><a class="list" href="/user">list project</a><p id="user">user :<span><%= user %></span><a href="/logout">logout</a></p></h1> 
+            <ul id="loads"></ul>
+            <input type="button" id="wordpress" value="cd themes"></input>
+            <p id="nut">Command:
+                <input type="text" id="command"></input>
+                <input type="button" id="logs" value="show log"></input>
+                <input type="button" id="atactbuild" value="build project" data-toggle="modal" data-target="#myModal"></input>
+                <input class="download" type="button" value="download database"></input>
+            </p>
+            <input type="button" value="run command" id="send"></input><img id="img" src="/assets/images/l.gif">
+            <ul id='results'>Results...</ul>
+            <!-- Button trigger modal -->
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Build Project</h4>
+                        </div>
+                        <div class="modal-body">
+                            <img id="img1" src="/assets/images/l.gif">
+                            <input class="composer" type="checkbox">run composer</input><input class="database" type="checkbox">import database</input>
+                            <p><span class="status"></span><span class="number"></span><button type="button" class="btn btn-primary log">view log</button></p>
+                            <!-- <span>import database</span> -->
+                            <p class="logapi"></p>
+                            <p class="viewlog"></p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary build">Build</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="useronline">
+                <ul class="showuser">
+                    <li>USER ONLINE</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

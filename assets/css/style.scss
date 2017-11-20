@@ -1,0 +1,132 @@
+/* style for header */
+
+@import 'common/button';
+
+
+
+.header{
+	.navbar{
+		margin-bottom: 0;
+		background: #fff;
+		box-shadow: 1px 1px 9px #666;
+		border-radius: 0;
+		.navbar-brand{
+				color: #2980b9;
+			}
+			ul{
+				li{
+					a.logout{
+				color: #2980b9;
+					}
+				}
+			}
+	}
+	
+	
+}
+
+/* style for main */
+
+.main{
+	padding-bottom: 20px;
+	.content{
+		border: 1px solid #d2d2d2;
+		background: #eeeeee;
+		margin-top: 10px;
+		border-radius: 0px;
+		height: 400px;
+		width: 100%;
+	}
+
+	.text-last{
+		@extend .content;
+		height: 100px;
+	}
+	.themes{
+		padding: 20px;	
+		padding-top: 0px;
+		padding-bottom: 50px;
+		border: 1px solid #d2d2d2;		
+		border-radius: 3px;
+		margin-bottom: 10px;
+		margin-top: 10px;
+		button{
+			margin-right:0px;
+		}
+		
+	}
+
+	.command{
+		border: 1px solid #d2d2d2;
+		border-radius: 3px;
+		padding: 10px;
+		padding-bottom: 45px;
+		height: 100%;
+		.text{
+			padding-top: 10px;
+			float: left;
+			font-weight: bold;
+			p{
+					margin-right: 10px;
+					margin-left: 20px;
+			}
+		
+		}
+		.textarea{
+			float: left;
+			margin-right: 10px;
+			input{
+			width: 570px;
+			 background: #eeeeee;
+		 	border: 1px solid #d2d2d2;
+			 height: 35px;
+		}
+		}
+			
+			.button{
+			float: left;
+			button{
+				margin-top: 0px;
+				margin-right:0px;
+
+			}
+			
+		}
+		
+	}
+
+	.show-log{
+		float: left;
+		background: #fff;
+		color: #2980b9;
+	
+	}
+
+	.buid-project{
+		float: left;
+	}
+
+	.dowload{
+		float: left;
+	
+	}
+
+	.online-user{
+		border: 1px solid #d2d2d2;
+		border-radius: 3px;
+		color: #2980b9;
+		h2{
+			font-weight: bold;
+			border-bottom: 1px solid #ccc;
+			padding: 10px;
+		}
+		.list-group{
+
+			.list-group-item{
+				border: 0;
+			}
+
+		}
+	}
+
+}
