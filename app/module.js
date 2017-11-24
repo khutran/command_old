@@ -34,7 +34,9 @@ var dump = function(res, domain, callback){
 					 resutls.data,
 					 '--default-character-set=utf8',
 					 '--comments'
-					]);
+					],{
+						highWaterMark: 16 * 1024
+					});
 			res.setHeader('Content-Type','application/octet-stream');
 			res.setHeader('Content-disposition', `filename=${resutls.data}.sql`);
 			dumpdatabase.stdout.pipe(res);

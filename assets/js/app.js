@@ -1,8 +1,9 @@
  
   $(function () {
-    var socket = io();
-    var domain = $('span#domain').text();
+    // var ns = io('/test');
     var user = $('#user span').text();
+    var socket = io.connect({query: `user=${user}`});
+    var domain = $('span#domain').text();
 
     $('#send').click(function(){
       $('#results').empty();

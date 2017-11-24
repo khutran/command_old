@@ -8,18 +8,27 @@ var spawn = require('child_process').spawn;
 var listuser = require('./config').listuser;
 
 module.exports = function(io){
+	// console.log(Object.values(io.nsps));
+	// ns = io.of('/test');
+	// ns.on('connection', (socket)=>{
+	// 	console.log('test');
+	// });
 
 	io.on('connection', function(socket){
 
+		io.engine.generateId = function (req) {
+		    return `${req._query['user']}_idmimoW1`
+		}
+		
 		socket.on('userlogin', function(data){
 			var user = {'user': data.user, 'id_socket': socket.id};
-
 			listuser.forEach(function(value, key){
 				if(value.user == data.user){
 					listuser.splice(key, 1);
 				}
 			});
 			listuser.push(user);
+			// console.log(listuser);
 			socket.broadcast.emit('noticationalluser', user);
 		});
 
