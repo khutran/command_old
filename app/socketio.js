@@ -6,15 +6,28 @@ var connection = require('./config');
 const fs = require('fs');
 var spawn = require('child_process').spawn;
 var listuser = require('./config').listuser;
-
+var listrooms = [];
 module.exports = function(io){
 	// console.log(Object.values(io.nsps));
-	// ns = io.of('/test');
+	// ns = io.of('rooms1');
 	// ns.on('connection', (socket)=>{
-	// 	console.log('test');
+	// 	socket.join('rooms');
+	// 	socket.on('rooms', (data)=>{
+	// 		console.log(data);
+	// 	});
 	// });
-
 	io.on('connection', function(socket){
+		// socket.broadcast.to('khu_idmimoW1').emit('chat', 'hello');
+		socket.on('create_rooms', (name_rooms)=>{
+			listrooms.push(name_rooms);
+			socket.join(name_rooms);
+			console.log(socket.adapter.rooms);
+		});
+
+		socket.on('out_rooms', (name_rooms)=>{
+			socket.leave(name_rooms);
+			console.log(socket.adapter.rooms);
+		});
 
 		io.engine.generateId = function (req) {
 		    return `${req._query['user']}_idmimoW1`
@@ -28,7 +41,6 @@ module.exports = function(io){
 				}
 			});
 			listuser.push(user);
-			// console.log(listuser);
 			socket.broadcast.emit('noticationalluser', user);
 		});
 
@@ -54,9 +66,6 @@ module.exports = function(io){
 		socket.on('loaduser', function(){
 			socket.emit('loaduser', listuser);
 		});
-	});
-
-	io.on('connection', function(socket){
 
 		var checknextbuild = function(domain, connect){
 			return Q.promise((respose)=>{

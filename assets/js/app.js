@@ -79,6 +79,14 @@
         window.location.href = url;
     });
 
+    $('#create_rooms').click(function() {
+      socket.emit('create_rooms', user);
+    });
+
+    $('#out_rooms').click(function() {
+      socket.emit('out_rooms', user);
+    });
+
     socket.emit('loads', {'domain': domain});
 
     // socket.on('dump', function(dump){
