@@ -17,7 +17,7 @@ var finddatabase = function(domain, callback){
 			return callback({'stt': 'error', 'error': error.message});
 		}else{
 			var arr = data.split("\n");
-			return callback({'stt': 'suscess', 'data':arr[0].slice(19, -3)});
+			return callback({'stt': 'suscess', 'data':arr[0].replace(/ /gi, '').slice(18, -3)});
 		}
 	});		
 };
