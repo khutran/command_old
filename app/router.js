@@ -42,6 +42,14 @@ module.exports = function(app , passport){
 		}
 	);
 
+	app.get('/admin', x.loginM, function(req, res){
+		let a = user_login.find(x => x.user === req.session.userlogin);
+		if(a.administrator != 1){
+			res.send('not permission');
+		}else{
+			res.render('admin', {'name': req.session.userlogin, administrator: a.administrator});
+		}
+	});
 
 	app.get('/logout', function(req, res){
 		user_login.forEach(function(value, key){

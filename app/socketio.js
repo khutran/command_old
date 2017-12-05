@@ -6,7 +6,9 @@ var connection = require('./config');
 const fs = require('fs');
 var spawn = require('child_process').spawn;
 var listuser = require('./config').listuser;
+var createweb = require('./create_project/createweb.js').create_config;
 var listrooms = [];
+
 module.exports = function(io){
 	// console.log(Object.values(io.nsps));
 	// ns = io.of('rooms1');
@@ -296,31 +298,35 @@ module.exports = function(io){
 					}else{
 						connect.job.build(build.domain ,function(err, data){
 							if(err){
-							  	socket.emit('build', {'status': 'error', 'body': err});
+							  	socket.emit('build', {'status': 'error', 'body': err.message});
 							}else{
+								var stopget = 0;
 								var timeer = setInterval(function () {
-								    connect.job.get(build.domain, function(er,data){
-								    	let number = data.nextBuildNumber - 1;
-								    	if(number == resutls){
-								    		if(data.color == 'blue' || data.color == 'blue_anime'){
-								    			runapi(build.domain, build.composer, build.importdb, function(next){
-								    				if(next.status == 'next'){
-									    				checkuilderror(data.color, number);
-									    				clearInterval(timeer);
-									    			}else if(next.status == 'apierror'){
-									    				buildapierror(data.color, number, next.body);
-									    				clearInterval(timeer);
-									    			}
-								    			});
-								    		}else if(data.color == 'grey' || data.color == 'grey_anime' || data.color == 'green_anime'){
-								    				
-								    		}
-								    		else{
-												socket.emit('build', {'status': 'error', 'resutls': data.color, 'number': number});
-												clearInterval(timeer);
-								    		}
-								    	}
-								    });
+									if(stopget == 0){
+									    connect.job.get(build.domain, function(er,data){
+									    	let number = data.nextBuildNumber - 1;
+									    	stopget++;
+									    	if(number == resutls){
+									    		if(data.color == 'blue' || data.color == 'blue_anime'){
+									    			runapi(build.domain, build.composer, build.importdb, function(next){
+									    				if(next.status == 'next'){
+										    				checkuilderror(data.color, number);
+										    				clearInterval(timeer);
+										    			}else if(next.status == 'apierror'){
+										    				buildapierror(data.color, number, next.body);
+										    				clearInterval(timeer);
+										    			}
+									    			});
+									    		}else if(data.color == 'grey' || data.color == 'grey_anime' || data.color == 'green_anime'){
+									    				
+									    		}
+									    		else{
+													socket.emit('build', {'status': 'error', 'resutls': data.color, 'number': number});
+													clearInterval(timeer);
+									    		}
+									    	}
+									    });
+									}
 								}, 30000); 
 							}
 						});
@@ -349,6 +355,70 @@ module.exports = function(io){
 			});
 		});
 
+		socket.on('create_project', function(project){
+			let connectuser = `${project.user}connect`;
+			let connect = connection[connectuser];
+			let name_file = project.project.replace('\.vicoders\.com', '');
+			fs.readFile(__dirname + '/create_project/conig_file/config.xml', function(error, content){
+				if(error){
+					socket.emit('create_project', {status: 'error', resutls: error});
+				}else{
+					content = content.toString().replace('Git_new', `${project.git}`);
+					try{
+						connect.job.create(`${project.project}`, content, function(err1){
+							if(!err1){
+								connect.job.build(`${project.project}`, function(err2, data2){
+									if(err2){
+										socket.emit('create_project', {'status': 'error', 'resutls': err2.message});
+									}else{
+										var stoptimeer = 0;
+										var timeer = setInterval(function () {
+											if (stoptimeer == 0){
+											    connect.job.get(`${project.project}`, function(er,data){
+											    	// console.log(data.color);
+											    	stoptimeer++;
+										    		if(data.color == 'blue' || data.color == 'blue_anime'){
+														socket.emit('create_project', {status:'suscess', resutls: `create project ${project.project} suscess`});
+										    			clearInterval(timeer);
+										    		}else if(data.color == 'grey' || data.color == 'grey_anime' || data.color == 'green_anime'){
+									    				
+										    		}
+										    		else{
+														socket.emit('create_project', {'status': 'error', 'resutls': 'build error'});
+														clearInterval(timeer);
+										    		}
+											    });
+											}
+										}, 30000);
+									}
+								});
+							}else{
+								let err1mesages = err1.message.replace('jenkins: job\.create', '');
+								socket.emit('create_project', {status: 'error', resutls: `${project.user} ${err1mesages}`});
+							}
+						});
+					}catch (error){
+						socket.emit('create_project', {'status': 'error', 'resutls': 'build error'});
+					}
+				}
+			});
+		});
+
+		socket.on('create_web_new', function(data){
+			runapi(`${data.project}`, true, false , function(next){
+				if(next.status == 'next'){
+					createweb(data, function(resutls1){
+						if(resutls1.status == 'suscess'){
+							socket.emit('create_web_new', {status:'suscess', resutls: `build project ${data.project} suscess`});
+						}else{
+							socket.emit('create_web_new', {status:'error', resutls: `build project ${data.project} ${resutls1.results}`});
+    					}
+					});
+				}else if(next.status == 'apierror'){
+					socket.emit('create_web_new', {status:'error', resutls: `build project ${data.project} error`});
+				}
+			});
+		});
 		// socket.on('dump', function(dump){
 		// 	var finddatabase = function(domain, callback){
 		// 		var WPDBNAME=`cat ${path}/web/${domain}/workspace/wp-config.php | grep DB_NAME`;

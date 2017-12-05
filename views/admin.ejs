@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="">
+	<link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/app.css">
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+	<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="/assets/js/app.js"></script>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Project</title>
+
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="/assets/css/style.css" crossorigin="anonymous">
+		<link rel="stylesheet" href="/assets/css/font-awesome/css/font-awesome.min.css" crossorigin="anonymous">
+	</head>
+	<body>
+		<div class="header">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="container">
+					<!-- Brand and toggle get grouped for better mobile display -->
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand list" href="/user">< Project List</a>
+					</div>
+			
+					<!-- Collect the nav links, forms, and other content for toggling -->
+					<div class="collapse navbar-collapse navbar-ex1-collapse">
+
+						<ul class="nav navbar-nav navbar-right">
+							<li><a href="#" id="user">Hello: <span><%= name %></a></li>
+							<li class="dropdown">
+								<a href="/logout" class="logout"><i class="fa fa-sign-in" aria-hidden="true"></i> Logout</a>
+							</li>
+						</ul>
+					</div><!-- /.navbar-collapse -->
+				</div>
+			</nav>
+		</div>
+	
+	<!-- end header -->
+		<div class="main">
+			<div class="container">
+				<div class="row">				
+					<div class="col-md-9">						
+						<div class="button ">
+							<button type="button" class="buid-project" id="create_project" data-toggle="modal" data-target="#myModal2">Create project</button>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="online-user">
+							<h2>
+								<i class="fa fa-users" aria-hidden="true"></i> Online Users</h2>
+							<ul class="list-group showuser">
+							</ul>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+            <!-- Button trigger modal -->
+            <!-- Modal -->
+			<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+			  <div class="modal-dialog" role="document">
+			   <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title">Create Project</h4><img id="img2" src="/assets/images/l.gif">
+			        <div class="show_create"></div>
+			      </div>
+			      <div class="modal-body">
+			      	<p>New project:<input class="form-control create_project" type="text"></input></p>
+			      	<p>Link Git:<input class="form-control git" type="text"></input></p>
+		      		<div class="info">
+			      		<span >Database :<input type="text" class="form-control database-db"></input></span>
+				      	<span >User :<input type="text" class="form-control user-db"></input></span>
+				      	<span >Password :<input type="text" class="form-control password-db"></input></span>
+				      	<span >Host :<input type="text" class="form-control host-db"></input></span>
+				      	<span >Table Prefix :<input type="text" class="form-control prefix-db"></input></span>
+				    </div>
+			     </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			        <button type="button" class="btn btn-primary" id="create_project_new">Create</button>
+			        <button type="button" class="btn btn-primary Send_create_project">Send</button>
+			      </div>
+			    </div><!-- /.modal-content -->
+			  </div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+
+		<script src="/assets/js/jquery.min.js"></script>
+		<script src="/assets/js/bootstrap.min.js"></script>
+	</body>
+</html>

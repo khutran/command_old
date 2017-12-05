@@ -18,7 +18,7 @@ img#img{
 .list{
 	margin-left: 150px;
 }
-#myModal{
+#myModal1{
 	margin-top: 50px;
 }
 #nut{
@@ -63,4 +63,11 @@ pre{
 }
 #back {
     display: none;
+}
+
+.info {
+  display: none;
+}
+#create_project_new {
+	display: none;
 }

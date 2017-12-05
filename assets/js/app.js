@@ -38,7 +38,7 @@
       $('#wordpress').css('display', 'inline-block');
     });;
 
-    $('#myModal').on('show.bs.modal',function(){
+    $('#myModal1').on('show.bs.modal',function(){
       if($('#img1').css('display') == 'inline-block'){
         $('.build').attr('disabled', 'disabled');
        }else{
@@ -53,7 +53,31 @@
       }
     });
 
+    $('#myModal2').on('show.bs.modal',function(){
+      $('.create_project').val('');
+      $('.git').val('');
+      $('.show_create').empty();
+      $('.info').css('display', 'none');
+    });
 
+    $('.Send_create_project').click(function() {
+      var name_project = $('.create_project').val();
+      var git = $('.git').val();
+      $("#img2").css('display', 'inline-block');
+      socket.emit('create_project', {user: user, project: name_project, git: git});
+    });
+
+    $('#create_project_new').click(function() {
+      $("#img2").css('display', 'inline-block');
+      var name_project = $('.create_project').val();
+      var database = $('.database-db').val();
+      var user_db = $('.user-db').val();
+      var password = $('.password-db').val();
+      var host = $('.host-db').val();
+      var prefix = $('.prefix-db').val();
+      $('#create_project_new').attr('disabled', 'disabled');
+      socket.emit('create_web_new', {project: name_project, database: database, user_db: user_db, password: password, host: host, prefix: prefix});
+    });
 
     $('.build').click(function() {
       var composer = $('.composer').prop('checked');
@@ -74,7 +98,6 @@
 
     $('.download').click(function() {
         $('#results').empty();
-        // socket.emit('dump', {'domain': domain});
         var url = '/download?domain='+domain;
         window.location.href = url;
     });
@@ -98,6 +121,23 @@
     //     $('#results').append($('<pre>').text(dump.error));
     //   }
     // });
+
+    socket.on('create_project', function(data){
+      var name_project = $('.create_project').val();
+      $("#img2").css('display', 'none');
+      $('.show_create').text(data.resutls);
+      $('.info').css('display', 'inline-block');
+      $('.database-db').val('vicoders_' + name_project.replace('\.vicoders\.com', '') + '_db');
+      $('.prefix-db').val('wp_')
+      $('.Send_create_project').css('display', 'none');
+      $('#create_project_new').css('display', 'inline-block');
+    });
+
+    socket.on('create_web_new', function(data){
+      $("#img2").css('display', 'none');
+      $('.show_create').text(data.resutls);
+      $('#create_project_new').removeAttr('disabled');
+    });
 
     socket.on('loads', function(loads){
       $('#loads').empty();
