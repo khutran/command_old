@@ -305,8 +305,8 @@ module.exports = function(io){
 									if(stopget == 0){
 									    connect.job.get(build.domain, function(er,data){
 									    	let number = data.nextBuildNumber - 1;
-									    	stopget++;
 									    	if(number == resutls){
+									    		stopget++;
 									    		if(data.color == 'blue' || data.color == 'blue_anime'){
 									    			runapi(build.domain, build.composer, build.importdb, function(next){
 									    				if(next.status == 'next'){
@@ -371,12 +371,8 @@ module.exports = function(io){
 									if(err2){
 										socket.emit('create_project', {'status': 'error', 'resutls': err2.message});
 									}else{
-										var stoptimeer = 0;
 										var timeer = setInterval(function () {
-											if (stoptimeer == 0){
 											    connect.job.get(`${project.project}`, function(er,data){
-											    	// console.log(data.color);
-											    	stoptimeer++;
 										    		if(data.color == 'blue' || data.color == 'blue_anime'){
 														socket.emit('create_project', {status:'suscess', resutls: `create project ${project.project} suscess`});
 										    			clearInterval(timeer);
@@ -388,7 +384,6 @@ module.exports = function(io){
 														clearInterval(timeer);
 										    		}
 											    });
-											}
 										}, 30000);
 									}
 								});

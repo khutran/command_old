@@ -58,7 +58,7 @@
         return false;
       }else{
         let suscess = $('.show_create').text();
-        if(suscess.indexOf('suscess') != -1 || suscess.indexOf('error') != -1){
+        if(suscess.indexOf('suscess') != -1 || suscess.indexOf('error') != -1 || $('.create_project').val() == ''){
           $('.create_project').val('');
           $('.git').val('');
           $('.show_create').empty();
