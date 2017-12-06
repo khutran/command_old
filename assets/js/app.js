@@ -54,16 +54,32 @@
     });
 
     $('#myModal2').on('show.bs.modal',function(){
-      $('.create_project').val('');
-      $('.git').val('');
-      $('.show_create').empty();
-      $('.info').css('display', 'none');
+      if($('.info').css('display') == 'inline-block' && $('#img2').css('display') == 'inline-block'){
+        return false;
+      }else{
+        let suscess = $('.show_create').text();
+        if(suscess.indexOf('suscess') != -1 || suscess.indexOf('error') != -1){
+          $('.create_project').val('');
+          $('.git').val('');
+          $('.show_create').empty();
+          $('.info').css('display', 'none');
+          $('#create_project_new').css('display', 'none');
+          $('.Send_create_project').css('display', 'inline-block');
+        }else{
+          return false;
+        }
+      }
     });
 
     $('.Send_create_project').click(function() {
       var name_project = $('.create_project').val();
       var git = $('.git').val();
       $("#img2").css('display', 'inline-block');
+      // $('.info').css('display', 'inline-block');
+      // $('.database-db').val('vicoders_' + name_project.replace('\.vicoders\.com', '') + '_db');
+      // $('.prefix-db').val('wp_')
+      // $('.Send_create_project').css('display', 'none');
+      // $('#create_project_new').css('display', 'inline-block');
       socket.emit('create_project', {user: user, project: name_project, git: git});
     });
 
@@ -223,16 +239,16 @@
     });
 
     socket.on('connect', function(){
-    	socket.emit('userlogin', {'user': user});
+      socket.emit('userlogin', {'user': user});
 
     });
 
     socket.emit('loaduser');
 
     socket.on('loaduser', function(data){
-    	data.forEach(function(user){
-    		$('.showuser').append(`<li class="${user.user}_i list-group-item"><i class="fa fa-user-o" aria-hidden="true"></i> ${user.user}</li>`)
-    	});
+      data.forEach(function(user){
+        $('.showuser').append(`<li class="${user.user}_i list-group-item"><i class="fa fa-user-o" aria-hidden="true"></i> ${user.user}</li>`)
+      });
     });
 
     socket.on('noticationalluser', function(data){
@@ -245,7 +261,7 @@
     });
 
     socket.on('noticationalluserout', function(data){
-    	$('li').remove(`.${data}_i`);
+      $('li').remove(`.${data}_i`);
     });
 
 });

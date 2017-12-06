@@ -32,6 +32,7 @@ var mysql      = require('mysql');
 
 	function finddatabase(callback){
 		exec('find database -name \"*.sql\"', function(error, data){
+			// data.replace(/\n/gi, '');
 			callback(data);
 		});
 	}
@@ -51,19 +52,22 @@ var mysql      = require('mysql');
 					.then(function(data1){
 						if(data1.status == '1'){
 							finddatabase((db)=>{
-								exec(`wp db import ${db}`, function(er){
-									if(er) callback({status: 'error', results: er.message});
-									exec(`wp db query '${search_domain}'`, function(err1, data){
-										if(err1){
-											callback({status: 'error', results: err1.message});
-										}else{
-											let url_domain = data.replace(/\n/gi, '').replace('option\_value','').replace(/ /gi, '');
-											exec(`wp search-replace ${url_domain} http://${project.project} \"--all-tables\"`, (err2)=>{
-												if(err2) callback({status: 'error', results: err2.message});
-												callback({status: 'suscess', results: 'suscess'});
-											});
-										}									
-									});
+								exec(`wpan db import ${db} --allow-root`.replace(/\n/gi, ' '), function(er){
+									if(er){
+										callback({status: 'error', results: er.message});
+									}else{
+										exec(`wpan db query '${search_domain}' --allow-root`.replace(/\n/gi, ' '), function(err1, data){
+											if(err1){
+												callback({status: 'error', results: err1.message});
+											}else{
+												let url_domain = data.replace(/\n/gi, '').replace('option\_value','').replace(/ /gi, '');
+												exec(`wpan search-replace ${url_domain} http://${project.project} --all-tables --allow-root`.replace(/\n/gi, ' '), (err2)=>{
+													if(err2) callback({status: 'error', results: err2.message});
+													callback({status: 'suscess', results: 'suscess'});
+												});
+											}									
+										});
+									}
 								});
 							});
 						}else{
