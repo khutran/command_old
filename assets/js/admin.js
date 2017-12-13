@@ -75,7 +75,7 @@ $(document).ready(function() {
       $('.project_name').val('');
     });
 
-    $('.icon-delete').change(function(){
+    $('.icon_delete').click(function(){
       console.log('test');
     });
 
@@ -84,7 +84,7 @@ $(document).ready(function() {
         alert(data.data);
       }else{
         let project_add = data.data;
-        let compiled = _.template('<div class="project-item"><label><%= project_add %></label><i class="icon fa fa-times icon-delete"></i></div>');
+        let compiled = _.template('<div class="project-item"><a href="/project/<%= project_add %>"><%= project_add %></a><i class="icon fa fa-times icon_delete"></i></div>');
         $('.projects').append(compiled({project_add: project_add}));
       }
     });
@@ -96,7 +96,7 @@ $(document).ready(function() {
         $('.projects').html(compiled({project: project}));
       }else{
         let project = data.data;
-        let compiled = _.template('<% _.forEach(project, function(item){%><div class="project-item"><label><%= item.name %></label><i class="icon fa fa-times icon-delete"></i></div><% }); %>');
+        let compiled = _.template('<% _.forEach(project, function(item){%><div class="project-item"><a href="/project/<%= item.name %>"><%= item.name %></a><i class="icon fa fa-times icon_delete"></i></div><% }); %>');
         $('.projects').html(compiled({project: project}));
       }
     });

@@ -144,7 +144,7 @@ pre{
     overflow: auto; }
     #andy-page .user-project .project-wrapper .projects .project-item {
       overflow: hidden; }
-      #andy-page .user-project .project-wrapper .projects .project-item label {
+      #andy-page .user-project .project-wrapper .projects .project-item a {
         margin: 0;
         font-weight: normal; }
       #andy-page .user-project .project-wrapper .projects .project-item .icon {
