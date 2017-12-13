@@ -65,8 +65,8 @@ module.exports = function(io){
 			socket.broadcast.emit('noticationalluserout', userout);
 		});
 
-		socket.on('loaduser', function(){
-			socket.emit('loaduser', listuser);
+		socket.on('loaduser_online', function(){
+			socket.emit('loaduser_online', listuser);
 		});
 
 		var checknextbuild = function(domain, connect){
@@ -414,6 +414,41 @@ module.exports = function(io){
 				}
 			});
 		});
+
+		socket.on('view_user', function(user){
+			let connectuser = "khuconnect";
+			let connect = connection[connectuser];
+			connect.view.get(user.name_check, (error, list)=>{
+				if(error){
+					socket.emit('view_user', {'status': 'error', 'data': error.message});
+				}else{
+					socket.emit('view_user', {'status': 'suscess', 'data': list.jobs});
+				}
+			});
+		});
+
+		socket.on('add_project', (add_project)=>{
+			let connectuser = "khuconnect";
+			let connect = connection[connectuser];
+			connect.view.add(add_project.name, add_project.project, (error)=>{
+				if(error){
+					socket.emit('add_project', {'status': 'error', 'data':error.message});
+				}
+				socket.emit('add_project', {'status': 'suscess', 'data': add_project.project});
+			});
+		});
+
+		// socket.on('load_user_proje', function(){
+		// 	let connectuser = "khuconnect";
+		// 	let connect = connection[connectuser];
+		// 	connect.view.list(function(error, data){
+		// 		if(error){
+		// 			socket.emit('load_user_proje');
+		// 		}else{
+		// 			socket.emit('load_user_proje', data);
+		// 		}
+		// 	});
+		// });
 		// socket.on('dump', function(dump){
 		// 	var finddatabase = function(domain, callback){
 		// 		var WPDBNAME=`cat ${path}/web/${domain}/workspace/wp-config.php | grep DB_NAME`;

@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var _ = require("lodash");
 
 var bodyParser = require('body-parser');
 var flash        = require('connect-flash');
@@ -19,6 +20,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.locals._ = _;
 
 app.use(passport.initialize());
 app.use(passport.session()); 

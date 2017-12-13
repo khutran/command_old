@@ -53,48 +53,6 @@
       }
     });
 
-    $('#myModal2').on('show.bs.modal',function(){
-      if($('.info').css('display') == 'inline-block' && $('#img2').css('display') == 'inline-block'){
-        return false;
-      }else{
-        let suscess = $('.show_create').text();
-        if(suscess.indexOf('suscess') != -1 || suscess.indexOf('error') != -1 || $('.create_project').val() == ''){
-          $('.create_project').val('');
-          $('.git').val('');
-          $('.show_create').empty();
-          $('.info').css('display', 'none');
-          $('#create_project_new').css('display', 'none');
-          $('.Send_create_project').css('display', 'inline-block');
-        }else{
-          return false;
-        }
-      }
-    });
-
-    $('.Send_create_project').click(function() {
-      var name_project = $('.create_project').val();
-      var git = $('.git').val();
-      $("#img2").css('display', 'inline-block');
-      // $('.info').css('display', 'inline-block');
-      // $('.database-db').val('vicoders_' + name_project.replace('\.vicoders\.com', '') + '_db');
-      // $('.prefix-db').val('wp_')
-      // $('.Send_create_project').css('display', 'none');
-      // $('#create_project_new').css('display', 'inline-block');
-      socket.emit('create_project', {user: user, project: name_project, git: git});
-    });
-
-    $('#create_project_new').click(function() {
-      $("#img2").css('display', 'inline-block');
-      var name_project = $('.create_project').val();
-      var database = $('.database-db').val();
-      var user_db = $('.user-db').val();
-      var password = $('.password-db').val();
-      var host = $('.host-db').val();
-      var prefix = $('.prefix-db').val();
-      $('#create_project_new').attr('disabled', 'disabled');
-      socket.emit('create_web_new', {project: name_project, database: database, user_db: user_db, password: password, host: host, prefix: prefix});
-    });
-
     $('.build').click(function() {
       var composer = $('.composer').prop('checked');
       var importdb = $('.database').prop('checked');
@@ -137,23 +95,6 @@
     //     $('#results').append($('<pre>').text(dump.error));
     //   }
     // });
-
-    socket.on('create_project', function(data){
-      var name_project = $('.create_project').val();
-      $("#img2").css('display', 'none');
-      $('.show_create').text(data.resutls);
-      $('.info').css('display', 'inline-block');
-      $('.database-db').val('vicoders_' + name_project.replace('\.vicoders\.com', '') + '_db');
-      $('.prefix-db').val('wp_')
-      $('.Send_create_project').css('display', 'none');
-      $('#create_project_new').css('display', 'inline-block');
-    });
-
-    socket.on('create_web_new', function(data){
-      $("#img2").css('display', 'none');
-      $('.show_create').text(data.resutls);
-      $('#create_project_new').removeAttr('disabled');
-    });
 
     socket.on('loads', function(loads){
       $('#loads').empty();
@@ -243,9 +184,9 @@
 
     });
 
-    socket.emit('loaduser');
+    socket.emit('loaduser_online');
 
-    socket.on('loaduser', function(data){
+    socket.on('loaduser_online', function(data){
       data.forEach(function(user){
         $('.showuser').append(`<li class="${user.user}_i list-group-item"><i class="fa fa-user-o" aria-hidden="true"></i> ${user.user}</li>`)
       });

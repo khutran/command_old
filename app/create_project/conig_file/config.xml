@@ -9,7 +9,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <url>Git_new</url>
-        <credentialsId>e985e514-9059-4b93-b99b-4a6d75f43324</credentialsId>
+        <credentialsId>5137e73f-389a-4e6b-8e43-5e3e9bf04fb9</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>

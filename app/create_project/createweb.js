@@ -78,6 +78,11 @@ var mysql      = require('mysql');
 					callback({status: 'error', results: err});
 				}
 			});
+			fs.readFile(__dirname + '/conig_file/htaccess.txt', (error3, htaccess)=>{
+				fs.writeFile(`/var/www/web/${project.project}/workspace/.htaccess`, htaccess, function(err3){
+					if(err3) throw err3;
+				});
+			});
 		});
 	}
 
