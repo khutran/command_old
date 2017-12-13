@@ -416,7 +416,7 @@ module.exports = function(io){
 		});
 
 		socket.on('view_user', function(user){
-			let connectuser = "khuconnect";
+			let connectuser = `${user.useradmin}connect`;
 			let connect = connection[connectuser];
 			connect.view.get(user.name_check, (error, list)=>{
 				if(error){
@@ -428,7 +428,7 @@ module.exports = function(io){
 		});
 
 		socket.on('add_project', (add_project)=>{
-			let connectuser = "khuconnect";
+			let connectuser = `${add_project.useradmin}connect`;
 			let connect = connection[connectuser];
 			connect.view.add(add_project.name, add_project.project, (error)=>{
 				if(error){

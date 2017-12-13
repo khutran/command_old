@@ -59,7 +59,7 @@ $(document).ready(function() {
       arr_user.push($(this).next('label').text());
       if(this.checked){
         var name_check = ($(this).next('label').text());
-        socket.emit('view_user', {'name_check': name_check});
+        socket.emit('view_user', {'name_check': name_check, 'useradmin': user});
       }else{
         return false;
       }
@@ -70,7 +70,7 @@ $(document).ready(function() {
       if(name_project_add ==='' || arr_user[0] === ''){
         return false;
       }else{
-        socket.emit('add_project', {'name': arr_user[0],'project': name_project_add});
+        socket.emit('add_project', {'name': arr_user[0],'project': name_project_add, 'useradmin': user});
       }
       $('.project_name').val('');
     });
