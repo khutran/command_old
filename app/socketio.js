@@ -433,11 +433,23 @@ module.exports = function(io){
 			connect.view.add(add_project.name, add_project.project, (error)=>{
 				if(error){
 					socket.emit('add_project', {'status': 'error', 'data':error.message});
+				}else{
+					socket.emit('add_project', {'status': 'suscess', 'data': add_project.project});
 				}
-				socket.emit('add_project', {'status': 'suscess', 'data': add_project.project});
 			});
 		});
 
+		socket.on('out_project', function(data){
+			let connectuser = `${data.useradmin}connect`;
+			let connect = connection[connectuser];
+			connect.view.remove(data.user, data.project, function(error){
+				if(!error){
+					socket.emit('out_project', {'status':'suscess', 'data': data.project});
+				}else{
+					socket.emit('out_project', {'status':'error', 'data': error.message});
+				}
+			});		
+		});
 		// socket.on('load_user_proje', function(){
 		// 	let connectuser = "khuconnect";
 		// 	let connect = connection[connectuser];

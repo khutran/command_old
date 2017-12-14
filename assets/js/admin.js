@@ -71,22 +71,36 @@ $(document).ready(function() {
         return false;
       }else{
         socket.emit('add_project', {'name': arr_user[0],'project': name_project_add, 'useradmin': user});
+        $('.project_name').val('');
       }
-      $('.project_name').val('');
     });
 
-    $('.icon_delete').click(function(){
-      console.log('test');
+    $('.search_user').click(function() {
+      let user_search = $('.user_search').val();
+      let list_user = $('div.user-item');
+      list_user.css('display', 'none');
+      $(`div.user-item.${user_search}_check`).removeAttr('style');
+    });
+
+    $('.user_search').click(function(){
+      $('.user_search').keyup(function() {
+        let key_search = $(this).val();
+        if(key_search === ''){
+          $('div.user-item').removeAttr('style');
+        }
+      })
     });
 
     socket.on('add_project', function(data){
       if(data.status === 'error'){
         alert(data.data);
+        return false;
       }else{
         let project_add = data.data;
-        let compiled = _.template('<div class="project-item"><a href="/project/<%= project_add %>"><%= project_add %></a><i class="icon fa fa-times icon_delete"></i></div>');
-        $('.projects').append(compiled({project_add: project_add}));
-      }
+        let class_project_add = data.data.replace(/\./gi,'-');
+        let compiled = _.template('<div class="project-item <%= class_project_add %>"><a href="/project/<%= project_add %>"><%= project_add %></a><i class="icon fa fa-times icon_delete" name="<%= project_add %>"></i></div>');
+        $('.projects').append(compiled({project_add: project_add, class_project_add: class_project_add}));
+      } 
     });
 
     socket.on('view_user', function(data){
@@ -96,10 +110,39 @@ $(document).ready(function() {
         $('.projects').html(compiled({project: project}));
       }else{
         let project = data.data;
-        let compiled = _.template('<% _.forEach(project, function(item){%><div class="project-item"><a href="/project/<%= item.name %>"><%= item.name %></a><i class="icon fa fa-times icon_delete"></i></div><% }); %>');
+        let compiled = _.template('<% _.forEach(project, function(item){ %><% let name_class = item.name.replace(/\\./gi, \'-\'); %><div class="project-item <%= name_class %>"><a href="/project/<%= item.name %>"><%= item.name %></a><i class="icon fa fa-times icon_delete" name="<%= item.name %>"></i></div><% }); %>');
         $('.projects').html(compiled({project: project}));
+
+        $('.icon_delete').click(function(){
+          var name = $(this).attr('name');
+          socket.emit('out_project', {'user': arr_user[0], 'project': name, 'useradmin': user});
+        });
+
+        socket.on('out_project', function(data){
+          let out_html = data.data.replace(/\./gi, '-');
+          if(data.status === 'suscess'){
+            alert(`remove ${data.data} suscess`);
+            $('div').remove(`.${out_html}`);
+          }else{
+            alert(`remove error : ${data.data}`);
+          }
+        });
+        // project.forEach(function(item, index) {
+        //   var container = document.createElement('div');
+        //   var link = document.createElement('a');
+        //   var icon = document.createElement('i');
+        //   container.setAttribute('class', 'project-item');
+        //   icon.setAttribute('class', 'icon fa fa-times icon_delete');
+        //   link.setAttribute('href', 'aaaaaa');
+        //   link.appendChild(document.createTextNode("CLICK ME"));
+        //   // Put icon and link inside contaner
+        //   container.appendChild(link);
+        //   container.appendChild(icon);
+        //   $('.projects').append(container);
+        // });
       }
     });
+
 
     socket.on('create_project', function(data){
       var name_project = $('.create_project').val();

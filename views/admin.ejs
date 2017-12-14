@@ -61,12 +61,12 @@
                         <div class="user-wrapper col-sm-5">
                             <div class="title">User</div>
                             <div class="search-wrapper">
-                                <input type="text" name="keyword" class="form-control">
-                                <i class="icon fa fa-search"></i>
+                                <input type="text" name="keyword" class="form-control user_search">
+                                <i class="icon fa fa-search search_user"></i>
                             </div>
                             <div class="users">
                             <% listuserload.forEach(function(item){ %>
-                            	<div class="user-item">
+                            	<div class="user-item <%= item.name+'_check' %>">
                             		<input class="list_user" type="checkbox" id="<%= item.name %>_check" />
                             		<label  for="<%= item.name %>_check"><%= item.name %></label>
                             	</div>
