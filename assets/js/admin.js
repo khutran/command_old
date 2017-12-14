@@ -46,7 +46,7 @@ $(document).ready(function() {
 
     var arr_user = [];
     $('.list_user').on('change', function(event) {
-      $('#content_project').empty();
+      $('.projects').empty();
       if(arr_user.length != 0){
         let = name_old = arr_user[0];
         if($(this).next('label').text() === name_old){
@@ -61,7 +61,7 @@ $(document).ready(function() {
         var name_check = ($(this).next('label').text());
         socket.emit('view_user', {'name_check': name_check, 'useradmin': user});
       }else{
-        return false;
+        $('.projects').empty();
       }
     });
 
