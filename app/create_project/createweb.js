@@ -48,7 +48,7 @@ var mysql      = require('mysql');
 			var search_domain = 'SELECT \`option_value\` FROM \`' + project.prefix +'options' +'\` WHERE \`option_name\` = "siteurl"'
 			fs.writeFile(`/var/www/web/${project.project}/workspace/wp-config.php`, wpconfig, function(err){
 				if(!err){
-					permission1(project.database, project.user_db, project.prefix, project.project, project.host)
+					permission1(project.database, project.user_db, project.prefix, project.project, "%")
 					.then(function(data1){
 						if(data1.status == '1'){
 							finddatabase((db)=>{
