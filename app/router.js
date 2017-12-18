@@ -7,7 +7,8 @@ var connection = require('./config');
 var listuser = require('./config').listuser;
 var admin = require('./config').admin;
 var user_login = require('./config').user_login;
-var request = require('request');
+var create_token = require('./module').create_token;
+var refresh_token = require('./module').refresh_token;
 // var stream = require('stream');
 // var contentsql = new stream.PassThrough();
 
@@ -81,21 +82,16 @@ module.exports = function(app, passport) {
     });
 
     app.get('/oauth', function(req, res) {
-        request.post({
-            headers: {
-                'content-type': 'application/x-www-form-urlencoded',
-                'Authorization': 'Basic YjU0NVVRcmFmWk1ONHZTR1NXOkNIRnpRa0FTN2IyWEtTbjRRYWJiUjJHYzY5WnJ0Rlk1'
-            },
-            url: 'https://bitbucket.org/site/oauth2/access_token',
-            body: `grant_type=authorization_code&code=${req.query.code}`
-        }, function(error, response, body) {
-            console.log(body);
-        });
-
+        if(req.query.code){
+            create_token(req.query.code, function(data){
+                res.render('oauth', {'reftk': data.refresh_token});
+            });
+        }else{
+            res.render('oauth', {'reftk':''});
+        }
         // request.get('https://bitbucket.org/site/oauth2/authorize?client_id=b545UQrafZMN4vSGSW&response_type=code&redirect_uri=http://nodetest.com/oauth&scope=pipeline', function(error, response, body) {
         //     console.log(req.query);
         // });
-        res.send('ok');
     });
 
     passport.serializeUser(function(user, done) {

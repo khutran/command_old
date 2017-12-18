@@ -3,6 +3,7 @@ var path = require('./config').path;
 var mysql = require('./config').mysql;
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
+var request = require('request');
 
 var loginM = function(req, res, next){
 	if (req.isAuthenticated())
@@ -46,7 +47,36 @@ var dump = function(res, domain, callback){
 	});
 }
 
+var create_token = function(cliend, callback){
+    request.post({
+        headers: {
+           'content-type': 'application/x-www-form-urlencoded',
+           'Authorization': 'Basic YjU0NVVRcmFmWk1ONHZTR1NXOkNIRnpRa0FTN2IyWEtTbjRRYWJiUjJHYzY5WnJ0Rlk1'
+        },
+        url: 'https://bitbucket.org/site/oauth2/access_token',
+        body: `grant_type=authorization_code&code=${cliend}`
+    }, function(error, response, body) {
+    	body = JSON.parse(body);
+    	callback(body);
+    });	
+}
+var refresh_token = function(code, callback){
+    request.post({
+        headers: {
+           'content-type': 'application/x-www-form-urlencoded',
+           'Authorization': 'Basic YjU0NVVRcmFmWk1ONHZTR1NXOkNIRnpRa0FTN2IyWEtTbjRRYWJiUjJHYzY5WnJ0Rlk1'
+        },
+        url: 'https://bitbucket.org/site/oauth2/access_token',
+        body: `grant_type=refresh_token&refresh_token=${code}`
+    }, function(error, response, body) {
+    	body = JSON.parse(body);
+    	callback(body);
+    });	
+}
+
 module.exports = {
 	loginM:loginM,
-	dump:dump
+	dump:dump,
+	create_token:create_token,
+	refresh_token:refresh_token
 }

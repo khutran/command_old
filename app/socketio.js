@@ -450,6 +450,26 @@ module.exports = function(io){
 				}
 			});		
 		});
+
+		socket.on('load_config', function(domain){
+			let connectuser = `${domain.user}connect`;
+			let connect = connection[connectuser];
+			connect.job.config(domain.domain, function(error, data){
+				if(error){
+					socket.emit('load_config', {'status': 'error', 'data': error.message});
+				}else{
+					let find_link1 = data.indexOf('bitbucket.org');
+					let find_link2 = data.indexOf('.git</url>');
+					let link_git = data.slice(find_link1+14, find_link2);
+					var arr_bit = link_git.split('\/');
+					socket.emit('load_config',{'status': 'suscess', 'data': arr_bit});
+				}
+			});
+		});
+
+		// socket.on('oauth_load', function(){
+		// 	console.log(arr_bit);
+		// });
 		// socket.on('load_user_proje', function(){
 		// 	let connectuser = "khuconnect";
 		// 	let connect = connection[connectuser];

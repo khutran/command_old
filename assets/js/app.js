@@ -5,6 +5,18 @@
     var socket = io.connect({query: `user=${user}`});
     var domain = $('span#domain').text();
 
+    $('.bitbucket').click(function() {
+      socket.emit('load_config', {'user': user, 'domain':domain});
+    });
+
+    socket.on('load_config', function(data){
+      if(data.status == 'error'){
+        alert(`${data.data}`);
+      }else{
+        window.open('https://bitbucket.org/site/oauth2/authorize?client_id=b545UQrafZMN4vSGSW&response_type=code');
+      }
+    });
+
     $('#send').click(function(){
       $('#results').empty();
       $("#img").css('display', 'inline-block');
@@ -86,16 +98,6 @@
 
     socket.emit('loads', {'domain': domain});
 
-    // socket.on('dump', function(dump){
-    //   if(dump.status == 'suscess'){
-    //     var url = '/download/'+dump.database+'.sql';
-    //     window.location.href = url;
-    //     return false;
-    //   }else if(dump.status == 'error'){
-    //     $('#results').append($('<pre>').text(dump.error));
-    //   }
-    // });
-
     socket.on('loads', function(loads){
       $('#loads').empty();
       var listfile =  loads.resutls.split('\n');
@@ -119,7 +121,6 @@
         list.forEach(function(value, keys){
           value.forEach(function(value2, keys2){
             console.log(value2);
-            // if(value2)
             $(`#loads${keys}`).append($('<li>').text(value2));
           });
         });

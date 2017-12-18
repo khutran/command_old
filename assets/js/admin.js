@@ -40,10 +40,6 @@ $(document).ready(function() {
       socket.emit('create_web_new', {project: name_project, database: database, user_db: user_db, password: password, host: host, prefix: prefix});
     });
 
-    $('#api').click(function() {
-      window.open('https://bitbucket.org/site/oauth2/authorize?client_id=b545UQrafZMN4vSGSW&response_type=code', "mywindow","status=no", "toolbar=1");
-    });
-
     var arr_user = [];
     $('.list_user').on('change', function(event) {
       $('.projects').empty();
