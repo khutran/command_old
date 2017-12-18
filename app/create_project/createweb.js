@@ -4,7 +4,7 @@ var exec = require('child_process').exec;
 var mysql_i = require('./../config').mysql;
 var mysql      = require('mysql');
 
-	function permission1(database, user_db, prefix, project){
+	function permission1(database, user_db, prefix, project, host){
 		
 		return Q.Promise((res) => {
 		    var connection = mysql.createConnection({
@@ -17,7 +17,7 @@ var mysql      = require('mysql');
 	        });
 		    process.chdir(`/var/www/web/${project}/workspace/`);
 		    var new_db = `CREATE DATABASE ${database}`;
-			var privile = "grant all privileges on " + "\`" + database + "\`" + "\." + "*" + " to " + "\'" + user_db + "\'" + "@" + "\'" + "localhost" + "\'";
+			var privile = "grant all privileges on " + "\`" + database + "\`" + "\." + "*" + " to " + "\'" + user_db + "\'" + "@" + "\'" + host + "\'";
 				connection.query(`${new_db};${privile}`, [1, 2], function(error, results, fields){
 				if(error){
 					res({'status': '0', 'results': error});
@@ -48,7 +48,7 @@ var mysql      = require('mysql');
 			var search_domain = 'SELECT \`option_value\` FROM \`' + project.prefix +'options' +'\` WHERE \`option_name\` = "siteurl"'
 			fs.writeFile(`/var/www/web/${project.project}/workspace/wp-config.php`, wpconfig, function(err){
 				if(!err){
-					permission1(project.database, project.user_db, project.prefix, project.project)
+					permission1(project.database, project.user_db, project.prefix, project.project, project.host)
 					.then(function(data1){
 						if(data1.status == '1'){
 							finddatabase((db)=>{
