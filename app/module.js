@@ -17,7 +17,7 @@ var finddatabase = function(domain, callback) {
     exec(WPDBNAME, function(error, data) {
         if (error) {
             exec(LDBNAME, (err, data1) => {
-            	console.log(err);
+            	console.log(data1);
                 if (err) {
                     return callback({ 'stt': 'error', 'error': 'not find file config' });
                 } else {
