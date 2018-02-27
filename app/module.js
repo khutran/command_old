@@ -47,6 +47,7 @@ var dump = function(res, domain, callback) {
             ], {
                 highWaterMark: 16 * 1024
             });
+            console.log(dumpdatabase);
             res.setHeader('Content-Type', 'application/octet-stream');
             res.setHeader('Content-disposition', `filename=${resutls.data}.sql`);
             dumpdatabase.stdout.pipe(res);
