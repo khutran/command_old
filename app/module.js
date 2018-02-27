@@ -17,7 +17,6 @@ var finddatabase = function(domain, callback) {
     exec(WPDBNAME, function(error, data) {
         if (error) {
             exec(LDBNAME, (err, data1) => {
-            	console.log(data1);
                 if (err) {
                     return callback({ 'stt': 'error', 'error': 'not find file config' });
                 } else {
@@ -47,7 +46,7 @@ var dump = function(res, domain, callback) {
             ], {
                 highWaterMark: 16 * 1024
             });
-            console.log(dumpdatabase);
+            console.log(resutls.data);
             res.setHeader('Content-Type', 'application/octet-stream');
             res.setHeader('Content-disposition', `filename=${resutls.data}.sql`);
             dumpdatabase.stdout.pipe(res);
