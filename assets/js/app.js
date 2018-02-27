@@ -99,7 +99,7 @@
     socket.emit('loads', {'domain': domain});
 
     socket.on('loads', function(loads){
-      $('#loads').empty();
+      $('.loads').empty();
       var listfile =  loads.resutls.split('\n');
       var dem = listfile.length/3;
       var list = [];
@@ -120,7 +120,6 @@
       }else{
         list.forEach(function(value, keys){
           value.forEach(function(value2, keys2){
-            console.log(value2);
             $(`#loads${keys}`).append($('<li>').text(value2));
           });
         });
