@@ -21,7 +21,7 @@ var finddatabase = function(domain, callback) {
                     return callback({ 'stt': 'error', 'error': 'not find file config' });
                 } else {
                     var arr1 = data1.split("\n");
-                    return callback({ 'stt': 'suscess', 'data': arr1[0].replace(/ /gi, '').slice(12, -3) });
+                    return callback({ 'stt': 'suscess', 'data': arr1[0].replace(/ /gi, '').slice(12) });
                 }
             });
         } else {
@@ -46,7 +46,7 @@ var dump = function(res, domain, callback) {
             ], {
                 highWaterMark: 16 * 1024
             });
-            console.log(resutls.data);
+
             res.setHeader('Content-Type', 'application/octet-stream');
             res.setHeader('Content-disposition', `filename=${resutls.data}.sql`);
             dumpdatabase.stdout.pipe(res);
