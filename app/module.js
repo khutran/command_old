@@ -20,8 +20,8 @@ var finddatabase = function(domain, callback) {
                 if (error) {
                     return callback({ 'stt': 'error', 'error': 'not find file config' });
                 } else {
-                    var arr = data.split("\n");
-                    return callback({ 'stt': 'suscess', 'data': arr[0].replace(/ /gi, '').slice(18, -3) });
+                    var arr1 = data1.split("\n");
+                    return callback({ 'stt': 'suscess', 'data': arr1[0].replace(/ /gi, '').slice(18, -3) });
                 }
             });
         } else {
