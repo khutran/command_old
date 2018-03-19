@@ -114,7 +114,7 @@ module.exports = function(app, passport) {
             if (admin.indexOf(`${user}`) != -1) {
                 administrator = 1;
             }
-            user_login.push({ 'user': user, 'administrator': administrator });
+            user_login.push({ 'user': user, 'administrator': administrator , host: req.body.hosts});
             userconnect[userconnects] = connect;
             objectAssign(connection, userconnect);
             connect.view.get(user, function(err, data) {
