@@ -229,7 +229,7 @@ module.exports = function(io) {
                                         'User-Agent': 'Super Agent/0.0.1',
                                         'Content-Type': 'application/x-www-form-urlencoded'
                                     },
-                                    form: { 'website': command.domain, 'select': 'buildcommand', 'command': command.command }
+                                    form: { 'website': command.domain, 'select': 'buildcommand', 'command': JSON.stringify(command.command) }
                                 };
                                 request(options, function(error, respose, body) {
                                     if (!error && respose.statusCode == 200) {
